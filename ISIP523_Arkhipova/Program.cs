@@ -36,14 +36,17 @@ namespace ISIP523_Arkhipova
         {
             return Quantity > 0;
         }
-
+        public void print()
+        {
+            Console.WriteLine($"{Code} | {Name} | {Price}руб | {Quantity}шт. | {Category}");
+        }
     }
-
+     
     internal class Program
     {
         static void Main(string[] args)
         {
-        
+            List<Product> products = new List<Product>();
     }
 }
 }
