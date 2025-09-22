@@ -6,11 +6,44 @@ using System.Threading.Tasks;
 
 namespace ISIP523_Arkhipova
 {
+    enum Category
+    {
+        electronics,
+        clothing,
+        food,
+        books,
+    }
+
+    class Product
+    {
+        private static int newId = 1000;
+
+        public string Code;
+        public string Name;
+        public double Price;
+        public int Quantity;
+        public Category Category;
+
+        public Product(string name, double price, int kolvo, Category categor)
+        {
+            Code = "1" + (newId++).ToString();
+            Name = name;
+            Price = price;
+            Quantity = kolvo;
+            Category = categor;
+        }
+        public bool chek()
+        {
+            return Quantity > 0;
+        }
+
+    }
+
     internal class Program
     {
         static void Main(string[] args)
         {
-
-        }
+        
     }
+}
 }
