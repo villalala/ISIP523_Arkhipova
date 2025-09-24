@@ -13,7 +13,7 @@ namespace ISIP523_Arkhipova
 
     class Product
     {
-        private static int newId = 1000;
+        private static int newId = 0;
         public string Code;
         public string Name;
         public double Price;
@@ -58,7 +58,6 @@ namespace ISIP523_Arkhipova
         {
             try
             {
-                Console.Clear();
                 Console.WriteLine("ДОБАВЛЕНИЕ ТОВАРА");
 
                 Console.Write("Введите название товара: ");
@@ -90,7 +89,6 @@ namespace ISIP523_Arkhipova
 
         static void remove()
         {
-            Console.Clear();
             Console.WriteLine("УДАЛЕНИЕ ТОВАРА");
             if (products.Count == 0)
             {
@@ -125,7 +123,6 @@ namespace ISIP523_Arkhipova
 
         static void zakaz()
         {
-            Console.Clear();
             Console.WriteLine("ЗАКАЗ ПОСТАВКИ");
             if (products.Count == 0)
             {
@@ -168,7 +165,6 @@ namespace ISIP523_Arkhipova
 
         static void sell()
         {
-            Console.Clear();
             Console.WriteLine("ПРОДАЖА ТОВАРА");
             if (products.Count == 0)
             {
@@ -224,14 +220,103 @@ namespace ISIP523_Arkhipova
             }
         }
 
-        
+        static void searchcode()
+        {
+            Console.WriteLine("ПОИСК ПО КОДУ");
+            Console.Write("Введите код товара: ");
+            string code = Console.ReadLine();
+
+            bool found = false;
+            foreach (Product product in products)
+            {
+                if (product.Code.Contains(code))
+                {
+                    product.print();
+                    found = true;
+                }
+            }
+
+            if (!found) Console.WriteLine("Товары не найдены!");
+        }
+
+        static void searchname()
+        {
+            Console.WriteLine("ПОИСК ПО НАЗВАНИЮ");
+            Console.Write("Введите название товара: ");
+            string name = Console.ReadLine().ToLower();
+
+            bool found = false;
+            foreach (Product product in products)
+            {
+                if (product.Name.ToLower().Contains(name))
+                {
+                    product.print();
+                    found = true;
+                }
+            }
+
+            if (!found) Console.WriteLine("Товары не найдены!");
+        }
+
+        static void searchcategor()
+        {
+            Console.WriteLine("ПОИСК ПО КАТЕГОРИИ");
+            Console.WriteLine("0. Electronics");
+            Console.WriteLine("1. Clothing");
+            Console.WriteLine("2. Food");
+            Console.WriteLine("3. Books");
+            Console.Write("Выберите категорию (0-3): ");
+
+            if (Enum.TryParse(Console.ReadLine(), out Category category))
+            {
+                bool found = false;
+                foreach (Product product in products)
+                {
+                    if (product.Category == category)
+                    {
+                        product.print();
+                        found = true;
+                    }
+                }
+
+                if (!found) Console.WriteLine("Товары не найдены!");
+            }
+            else
+            {
+                Console.WriteLine("Неверная категория!");
+            }
+        }
+
+        static void prlist()
+        {
+            Console.WriteLine("\nСписок товаров:");
+            foreach (var product in products)
+            {
+                product.PrintShort();
+            }
+            Console.WriteLine();
+        }
+
+        static void show()
+        {
+            Console.WriteLine("ВСЕ ТОВАРЫ");
+            if (products.Count == 0)
+            {
+                Console.WriteLine("Список товаров пуст!");
+                return;
+            }
+
+            foreach (var product in products)
+            {
+                product.print();
+            }
+        }
 
         static void Main(string[] args)
         {
             while (true)
             {
-                Console.Clear();
-                Console.WriteLine("МЕНЮ");
+                Console.WriteLine("\nМЕНЮ");
                 Console.WriteLine("1. Добавить товар");
                 Console.WriteLine("2. Удалить товар");
                 Console.WriteLine("3. Заказать поставку товара");
@@ -262,9 +347,6 @@ namespace ISIP523_Arkhipova
                         Console.WriteLine("Неверный выбор!");
                         break;
                 }
-
-                Console.WriteLine("\nНажмите любую клавишу для продолжения...");
-                Console.ReadKey();
             }
         }
     }
