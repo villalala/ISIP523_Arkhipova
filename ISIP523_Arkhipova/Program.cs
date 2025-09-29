@@ -87,10 +87,63 @@ namespace ISIP523_Arkhipova
                         count++;
                     }
                 }
-
                 return count;
             }
 
+            static int Glasn(string text)
+            {
+                int count = 0;
+                string lowerText = text.ToLower();
+
+                foreach (char c in lowerText)
+                {
+                    if (isGlasn(c))
+                    {
+                        count++;
+                    }
+                }
+                return count;
+            }
+
+            static int Soglasn(string text)
+            {
+                int count = 0;
+                string lowerText = text.ToLower();
+
+                foreach (char c in lowerText)
+                {
+                    if (isSoglasn(c))
+                    {
+                        count++;
+                    }
+                }
+                return count;
+            }
+
+            static string Longg(string text)
+            {
+                string[] words = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                string longest = "";
+                int maxLength = 0;
+
+                foreach (string word in words)
+                {
+                    string cleanWord = clean(word);
+                    if (cleanWord.Length > maxLength)
+                    {
+                        maxLength = cleanWord.Length;
+                        longest = cleanWord;
+                    }
+                }
+                return longest;
+            }
+
+            static string clean(string word)
+            {
+                char[] punctuation = { '.', ',', '!', '?', ':', ';', '-', '(', ')', '[', ']', '{', '}', '"', '\'' };
+                string cleanWord = word.Trim(punctuation);
+                return cleanWord;
+            }
 
             static void Main(string[] args)
         {
