@@ -10,6 +10,7 @@ namespace ISIP523_Arkhipova
     {
         static void Main(string[] args)
         {
+
         }
     }
 }
