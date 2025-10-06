@@ -21,30 +21,67 @@ namespace ISIP523_Arkhipova
         }
 
         private static List<Text> all = new List<Text>();
+        private static string hranenie = "";
 
         internal class Program
         {
-            static void analizNew()
+            static void text()
             {
                 Console.WriteLine("Введите текст (минимум 100 символов):");
-                string inputText = Console.ReadLine();
+                Console.WriteLine("(Для завершения ввода нажмите Enter два раза)");
 
-                if (inputText == null || inputText.Length < 100)
+                StringBuilder textBuilder = new StringBuilder();
+                string line;
+                int lineCount = 0;
+ 
+                while (true)
+                {
+                    line = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(line))
+                    {
+                        if (lineCount > 0 && string.IsNullOrWhiteSpace(textBuilder.ToString().Split('\n').Last()))
+                            break;
+                    }
+
+                    if (lineCount > 0)
+                    {
+                        textBuilder.AppendLine();
+                    }
+                    textBuilder.Append(line);
+                    lineCount++;
+                }
+
+                string inputText = textBuilder.ToString().Trim();
+
+                if (inputText.Length < 100)
                 {
                     Console.WriteLine("Ошибка: текст должен содержать минимум 100 символов.");
                     return;
                 }
 
-                Text stats = new Text();
-                stats.text = inputText;
+                hranenie = inputText;
+                Console.WriteLine($"Текст успешно сохранен! Длина: {hranenie.Length} символов");
+            }
 
-                stats.word = Word(inputText);
-                stats.shortt = Short(inputText);
-                stats.predlozen = Predloz(inputText);
-                stats.glasnie = Glasn(inputText);
-                stats.soglasn = Soglasn(inputText);
-                stats.longg = Longg(inputText);
-                stats.povtor = Povtor(inputText);
+            static void analizNew()
+            {
+                if (string.IsNullOrEmpty(hranenie))
+                {
+                    Console.WriteLine("Сначала введите текст (пункт 1 в меню)!");
+                    return;
+                }
+
+                Text stats = new Text();
+                stats.text = hranenie;
+
+                stats.word = Word(hranenie);
+                stats.shortt = Short(hranenie);
+                stats.predlozen = Predloz(hranenie);
+                stats.glasnie = Glasn(hranenie);
+                stats.soglasn = Soglasn(hranenie);
+                stats.longg = Longg(hranenie);
+                stats.povtor = Povtor(hranenie);
 
                 all.Add(stats);
 
@@ -53,13 +90,15 @@ namespace ISIP523_Arkhipova
 
             static int Word(string text)
             {
-                string[] words = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                char[] separators = { ' ', '\n', '\r', '\t' };
+                string[] words = text.Split(separators, StringSplitOptions.RemoveEmptyEntries);
                 return words.Length;
             }
 
             static string Short(string text)
             {
-                string[] words = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                char[] separators = { ' ', '\n', '\r', '\t' };
+                string[] words = text.Split(separators, StringSplitOptions.RemoveEmptyEntries);
                 string shortest = "";
                 int minLength = int.MaxValue;
 
@@ -122,7 +161,8 @@ namespace ISIP523_Arkhipova
 
             static string Longg(string text)
             {
-                string[] words = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                char[] separators = { ' ', '\n', '\r', '\t' };
+                string[] words = text.Split(separators, StringSplitOptions.RemoveEmptyEntries);
                 string longest = "";
                 int maxLength = 0;
 
@@ -140,7 +180,7 @@ namespace ISIP523_Arkhipova
 
             static string clean(string word)
             {
-                char[] punctuation = { '.', ',', '!', '?', ':', ';', '-', '(', ')', '[', ']', '{', '}', '"', '\'' };
+                char[] punctuation = { '.', ',', '!', '?', ':', ';', '-', '(', ')', '[', ']', '{', '}', '"', '\'', '\n', '\r', '\t' };
                 string cleanWord = word.Trim(punctuation);
                 return cleanWord;
             }
@@ -224,13 +264,115 @@ namespace ISIP523_Arkhipova
                     Console.WriteLine($"Количество слов: {all[i].word}");
                     Console.WriteLine($"Количество предложений: {all[i].predlozen}");
                     Console.WriteLine($"Самое длинное слово: '{all[i].longg}'");
+
+                    // Показываем превью текста
+                    string preview = all[i].text.Length > 100 ?
+                        all[i].text.Substring(0, 100) + "..." :
+                        all[i].text;
+                    Console.WriteLine($"Превью: {preview}");
                 }
             }
 
-
-        static void Main(string[] args)
+            static void Main(string[] args)
             {
+                bool a = true;
 
+                while (a)
+                {
+                    Console.WriteLine("\nМЕНЮ");
+                    Console.WriteLine("1 - Ввод нового текста");
+                    Console.WriteLine("2 - Подсчёт количества слов");
+                    Console.WriteLine("3 - Поиск самого короткого слова");
+                    Console.WriteLine("4 - Подсчёт количества предложений");
+                    Console.WriteLine("5 - Подсчёт количества гласных букв");
+                    Console.WriteLine("6 - Подсчёт количества согласных букв");
+                    Console.WriteLine("7 - Поиск самого длинного слова");
+                    Console.WriteLine("8 - Статистика по частоте букв");
+                    Console.WriteLine("9 - Полный анализ текста");
+                    Console.WriteLine("10 - Просмотр статистики по прошлым текстам");
+                    Console.WriteLine("0 - Выход");
+
+                    string choice = Console.ReadLine();
+
+                    switch (choice)
+                    {
+                        case "1":
+                            text();
+                            break;
+                        case "2":
+                            if (string.IsNullOrEmpty(hranenie))
+                            {
+                                Console.WriteLine("Сначала введите текст (пункт 1 в меню)!");
+                                break;
+                            }
+                            Console.WriteLine($"Количество слов: {Word(hranenie)}");
+                            break;
+                        case "3":
+                            if (string.IsNullOrEmpty(hranenie))
+                            {
+                                Console.WriteLine("Сначала введите текст (пункт 1 в меню)!");
+                                break;
+                            }
+                            Console.WriteLine($"Самое короткое слово: '{Short(hranenie)}'");
+                            break;
+                        case "4":
+                            if (string.IsNullOrEmpty(hranenie))
+                            {
+                                Console.WriteLine("Сначала введите текст (пункт 1 в меню)!");
+                                break;
+                            }
+                            Console.WriteLine($"Количество предложений: {Predloz(hranenie)}");
+                            break;
+                        case "5":
+                            if (string.IsNullOrEmpty(hranenie))
+                            {
+                                Console.WriteLine("Сначала введите текст (пункт 1 в меню)!");
+                                break;
+                            }
+                            Console.WriteLine($"Количество гласных букв: {Glasn(hranenie)}");
+                            break;
+                        case "6":
+                            if (string.IsNullOrEmpty(hranenie))
+                            {
+                                Console.WriteLine("Сначала введите текст (пункт 1 в меню)!");
+                                break;
+                            }
+                            Console.WriteLine($"Количество согласных букв: {Soglasn(hranenie)}");
+                            break;
+                        case "7":
+                            if (string.IsNullOrEmpty(hranenie))
+                            {
+                                Console.WriteLine("Сначала введите текст (пункт 1 в меню)!");
+                                break;
+                            }
+                            Console.WriteLine($"Самое длинное слово: '{Longg(hranenie)}'");
+                            break;
+                        case "8":
+                            if (string.IsNullOrEmpty(hranenie))
+                            {
+                                Console.WriteLine("Сначала введите текст (пункт 1 в меню)!");
+                                break;
+                            }
+                            Console.WriteLine("Статистика по буквам:");
+                            foreach (var pair in Povtor(hranenie))
+                            {
+                                Console.WriteLine($"  '{pair.Key}': {pair.Value} раз");
+                            }
+                            break;
+                        case "9":
+                            analizNew();
+                            break;
+                        case "10":
+                            showOld();
+                            break;
+                        case "0":
+                            a = false;
+                            break;
+                        default:
+                            Console.WriteLine("Неверный выбор. Попробуйте снова.");
+                            break;
+                    }
+                }
             }
         }
     }
