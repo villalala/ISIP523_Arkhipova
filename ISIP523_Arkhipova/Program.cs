@@ -30,26 +30,48 @@ namespace ISIP523_Arkhipova
                 Console.WriteLine("Введите текст (минимум 100 символов):");
                 Console.WriteLine("(Для завершения ввода нажмите Enter два раза)");
 
-                StringBuilder textBuilder = new StringBuilder();
+                string fullText = "";
                 string line;
-                int lineCount = 0;
- 
+                int emptyLine = 0;
+                bool hasContent = false;
+
                 while (true)
                 {
                     line = Console.ReadLine();
 
-                    if (string.IsNullOrWhiteSpace(line))
+                    if (string.IsNullOrEmpty(line))
                     {
-                        if (lineCount > 0 && string.IsNullOrWhiteSpace(textBuilder.ToString().Split('\n').Last()))
+                        emptyLine++;
+                        if (emptyLine >= 2 && hasContent)
+                        {
                             break;
+                        }
+                        else if (!hasContent)
+                        {
+                            Console.WriteLine("Пожалуйста, введите текст.");
+                            continue;
+                        }
                     }
-
-                    if (lineCount > 0)
+                    else
                     {
-                        textBuilder.AppendLine();
+                        emptyLine = 0;
+                        hasContent = true;
+
+                        if (!string.IsNullOrEmpty(fullText))
+                        {
+                            fullText += "\n" + line;
+                        }
+                        else
+                        {
+                            fullText = line;
+                        }
                     }
-                    textBuilder.Append(line);
-                    lineCount++;
+                }
+
+                if (fullText.Length < 100)
+                {
+                    Console.WriteLine($"Ошибка: текст должен содержать минимум 100 символов. Сейчас: {fullText.Length} символов.");
+                    return;
                 }
 
                 string inputText = textBuilder.ToString().Trim();
@@ -105,7 +127,7 @@ namespace ISIP523_Arkhipova
                 foreach (string word in words)
                 {
                     string cleanWord = clean(word);
-                    if (cleanWord.Length > 0 && cleanWord.Length < minLength)
+                    if (cleanWord.Length < minLength)
                     {
                         minLength = cleanWord.Length;
                         shortest = cleanWord;
@@ -265,7 +287,6 @@ namespace ISIP523_Arkhipova
                     Console.WriteLine($"Количество предложений: {all[i].predlozen}");
                     Console.WriteLine($"Самое длинное слово: '{all[i].longg}'");
 
-                    // Показываем превью текста
                     string preview = all[i].text.Length > 100 ?
                         all[i].text.Substring(0, 100) + "..." :
                         all[i].text;
@@ -293,6 +314,8 @@ namespace ISIP523_Arkhipova
                     Console.WriteLine("0 - Выход");
 
                     string choice = Console.ReadLine();
+
+                }
 
                     switch (choice)
                     {
