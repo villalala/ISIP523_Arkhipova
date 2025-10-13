@@ -74,15 +74,14 @@ namespace ISIP523_Arkhipova
                     return;
                 }
 
-                string inputText = textBuilder.ToString().Trim();
 
-                if (inputText.Length < 100)
+                if (fullText.Length < 100)
                 {
                     Console.WriteLine("Ошибка: текст должен содержать минимум 100 символов.");
                     return;
                 }
 
-                hranenie = inputText;
+                hranenie = fullText;
                 Console.WriteLine($"Текст успешно сохранен! Длина: {hranenie.Length} символов");
             }
 
@@ -286,11 +285,6 @@ namespace ISIP523_Arkhipova
                     Console.WriteLine($"Количество слов: {all[i].word}");
                     Console.WriteLine($"Количество предложений: {all[i].predlozen}");
                     Console.WriteLine($"Самое длинное слово: '{all[i].longg}'");
-
-                    string preview = all[i].text.Length > 100 ?
-                        all[i].text.Substring(0, 100) + "..." :
-                        all[i].text;
-                    Console.WriteLine($"Превью: {preview}");
                 }
             }
 
@@ -314,8 +308,6 @@ namespace ISIP523_Arkhipova
                     Console.WriteLine("0 - Выход");
 
                     string choice = Console.ReadLine();
-
-                }
 
                     switch (choice)
                     {
@@ -400,3 +392,4 @@ namespace ISIP523_Arkhipova
         }
     }
 }
+
