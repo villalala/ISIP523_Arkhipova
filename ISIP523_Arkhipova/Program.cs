@@ -66,7 +66,7 @@ namespace ISIP523_Arkhipova
                 Janr janr = (Janr)int.Parse(Console.ReadLine());
                 if (janree < 0 || janree > 5)
                     throw new Exception("Неверный номер жанра");
-                Genre genre = (Genre)genreInput;
+                Janr janr = (Janr)janrInput;
 
                 Console.Write("Введите год издания: ");
                 int year = Convert.ToInt32(Console.ReadLine());
@@ -148,7 +148,7 @@ namespace ISIP523_Arkhipova
                         SearchByAuthor();
                         break;
                     case "3":
-                        SearchByGenre();
+                        SearchByJanr();
                         break;
                     default:
                         Console.WriteLine("Неверный выбор!");
@@ -203,12 +203,12 @@ namespace ISIP523_Arkhipova
                 Console.WriteLine("5 - Biography");
                 Console.Write("Выберите жанр (0-5): ");
 
-                if (Enum.TryParse(Console.ReadLine(), out Genre genre))
+                if (Enum.TryParse(Console.ReadLine(), out Janr janr))
                 {
                     bool found = false;
                     foreach (Book book in books)
                     {
-                        if (book.genre == genre)
+                        if (book.janr == janr)
                         {
                             book.DisplayInfo();
                             found = true;
@@ -385,11 +385,11 @@ namespace ISIP523_Arkhipova
 
             static void Test()
             {
-                books.Add(new Book("Властелин Колец", "Дж. Р. Р. Толкин", Genre.Fantasy, 1954, 1200m));
-                books.Add(new Book("1984", "Джордж Оруэлл", Genre.ScienceFiction, 1949, 800m));
-                books.Add(new Book("Убийство в Восточном экспрессе", "Агата Кристи", Genre.Mystery, 1934, 650m));
-                books.Add(new Book("Гордость и предубеждение", "Джейн Остин", Genre.Romance, 1813, 700m));
-                books.Add(new Book("Дракула", "Брэм Стокер", Genre.Horror, 1897, 900m));
+                books.Add(new Book("Властелин Колец", "Дж. Р. Р. Толкин", Janr.Fantasy, 1954, 1200m));
+                books.Add(new Book("1984", "Джордж Оруэлл", Janr.ScienceFiction, 1949, 800m));
+                books.Add(new Book("Убийство в Восточном экспрессе", "Агата Кристи", Janr.Mystery, 1934, 650m));
+                books.Add(new Book("Гордость и предубеждение", "Джейн Остин", Janr.Romance, 1813, 700m));
+                books.Add(new Book("Дракула", "Брэм Стокер", Janr.Horror, 1897, 900m));
 
                 Console.WriteLine("Тестовые книги добавлены!");
             }
