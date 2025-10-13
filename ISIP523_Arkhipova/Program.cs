@@ -82,7 +82,7 @@ namespace ISIP523_Arkhipova
                 }
 
                 hranenie = fullText;
-                Console.WriteLine($"Текст успешно сохранен! Длина: {hranenie.Length} символов");
+                Console.WriteLine($"Текст успешно сохранен!");
             }
 
             static void analizNew()
