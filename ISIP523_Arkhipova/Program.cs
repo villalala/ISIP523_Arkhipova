@@ -338,7 +338,129 @@ namespace ISIP523_Arkhipova
 
         static void Main(string[] args)
         {
-        
+            bool outt = true;
+            while (outt)
+            {
+                Console.WriteLine("\nМЕНЮ:");
+                Console.WriteLine("1. Добавить студента");
+                Console.WriteLine("2. Добавить преподавателя");
+                Console.WriteLine("3. Вывод списков");
+                Console.WriteLine("4. Создать курс");
+                Console.WriteLine("5. Записать студента на курс");
+                Console.WriteLine("6. Список курсов студента");
+                Console.WriteLine("7. Список студентов на курсе");
+                Console.WriteLine("0. Выход");
+
+                Console.Write("\nВыберите действие: ");
+                int choice = Convert.ToInt32(Console.ReadLine());
+
+                switch (choice)
+                {
+                    case 1:
+                        Console.WriteLine();
+                        AddStudent();
+                        break;
+
+                    case 2:
+                        Console.WriteLine();
+                        AddTeacher();
+                        break;
+
+                    case 3:
+                        Console.WriteLine("\nВЫБОР СПИСКА:");
+                        Console.WriteLine("1. Список студентов");
+                        Console.WriteLine("2. Список преподавателей");
+                        Console.WriteLine("3. Список курсов");
+
+                        Console.Write("Выберите действие: ");
+                        int choicepoisk = Convert.ToInt32(Console.ReadLine());
+                        switch (choicepoisk)
+                        {
+                            case 1:
+                                if (AllStudents.Count != 0)
+                                {
+                                    Console.WriteLine("\nСписок студентов: ");
+                                    foreach (var s in AllStudents)
+                                    {
+                                        s.Print();
+                                        Console.WriteLine();
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Добавьте хотя бы одного студента");
+                                }
+                                break;
+
+                            case 2:
+                                if (AllTeachers.Count != 0)
+                                {
+                                    Console.WriteLine("\nСписок преподавателей: ");
+                                    foreach (var t in AllTeachers)
+                                    {
+                                        t.Print();
+                                        Console.WriteLine();
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Добавьте хотя бы одного преподавателя");
+                                }
+                                break;
+
+                            case 3:
+                                if (AllCourses.Count != 0)
+                                {
+                                    Console.WriteLine("\nСписок курсов: ");
+                                    foreach (var c in AllCourses)
+                                    {
+                                        c.Print();
+                                        Console.WriteLine();
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Добавьте хотя бы один курс");
+                                }
+                                break;
+
+                            default:
+                                Console.WriteLine("Неверный выбор");
+                                break;
+                        }
+                        break;
+
+                    case 4:
+                        Console.WriteLine();
+                        AddCourse();
+                        break;
+
+                    case 5:
+                        Console.WriteLine();
+                        AddStudentToCourse();
+                        break;
+
+                    case 6:
+                        Console.WriteLine();
+                        ShowStudentCourses();
+                        break;
+
+                    case 7:
+                        Console.WriteLine();
+                        ShowCourseStudents();
+                        break;
+
+                    case 0:
+                        outt = false;
+                        Console.WriteLine("Выход из программы...");
+                        break;
+
+                    default:
+                        Console.WriteLine("Неправильный пункт меню.");
+                        break;
+                }
+            }
+        }
     }
 }
     
