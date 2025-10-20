@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ISIP523_Zemdikhanova
+namespace ISIP523_Arkhipova
 {
     class Person
     {
@@ -71,6 +71,7 @@ namespace ISIP523_Zemdikhanova
             Console.WriteLine($"Зарплата: {salary}\nСтаж: {experience}");
         }
     }
+
     class Course
     {
         public string title;
@@ -99,8 +100,7 @@ namespace ISIP523_Zemdikhanova
 
         public void Print()
         {
-            string teacherName = teacher != null ? teacher.GetFullName() : "Не назначен";
-            Console.WriteLine($"Название: {title}\nУчитель: {teacherName}\nДлительность: {duration}");
+            Console.WriteLine($"Название: {title}\nУчитель: {teacher?.GetFullName() ?? "Не назначен"}\nДлительность: {duration}");
         }
 
         public bool IsStudent(Student s)
@@ -158,6 +158,7 @@ namespace ISIP523_Zemdikhanova
             AllTeachers.Add(new Teacher(name, surname, age, salary, experience));
             Console.WriteLine("Преподаватель добавлен");
         }
+
         static void AddCourse()
         {
             Console.Write("Введите название курса: ");
@@ -238,85 +239,106 @@ namespace ISIP523_Zemdikhanova
             AllCourses.Add(newCourse);
             Console.WriteLine("\n Курс успешно создан и добавлен!");
         }
-        private static void AddCourse()
+
+        static void AddStudentToCourse()
         {
-            Console.Write("Введите название курса: ");
-            string title = Console.ReadLine();
-            Console.Write("Введите длительность курса: ");
-            string duration = Console.ReadLine();
-
-            Course newCourse = new Course(title, duration);
-
-            if (AllTeachers.Count == 0)
+            if (AllCourses.Count == 0 || AllStudents.Count == 0)
             {
-                Console.WriteLine("Нет доступных преподавателей. Сначала добавьте хотя бы одного.");
-            }
-            else
-            {
-                Console.WriteLine("\nСписок преподавателей:");
-                foreach (var t in AllTeachers)
-                {
-                    t.Print();
-                    Console.WriteLine();
-                }
-
-                Console.Write("Введите фамилию преподавателя для назначения на курс: ");
-                string surnameSearch = Console.ReadLine();
-
-                Teacher foundTeacher = AllTeachers.Find(t => t.GetSurname().Equals(surnameSearch, StringComparison.OrdinalIgnoreCase));
-
-                if (foundTeacher != null)
-                {
-                    newCourse.GetTeacher(foundTeacher);
-                    Console.WriteLine($"Преподаватель {foundTeacher.GetFullName()} назначен на курс.");
-                }
-                else
-                {
-                    Console.WriteLine("Преподаватель с такой фамилией не найден.");
-                }
+                Console.WriteLine(" Нет доступных курсов или студентов.");
+                return;
             }
 
+            Console.WriteLine("\nСписок курсов:");
+            for (int i = 0; i < AllCourses.Count; i++)
+                Console.WriteLine($"{i + 1}. {AllCourses[i].title}");
+
+            Console.Write("Выберите номер курса: ");
+            int courseIndex = Convert.ToInt32(Console.ReadLine()) - 1;
+            if (courseIndex < 0 || courseIndex >= AllCourses.Count)
+            {
+                Console.WriteLine("Неверный выбор курса.");
+                return;
+            }
+
+            Console.WriteLine("\nСписок студентов:");
+            for (int i = 0; i < AllStudents.Count; i++)
+                Console.WriteLine($"{i + 1}. {AllStudents[i].GetFullName()}");
+
+            Console.Write("Выберите номер студента: ");
+            int studentIndex = Convert.ToInt32(Console.ReadLine()) - 1;
+            if (studentIndex < 0 || studentIndex >= AllStudents.Count)
+            {
+                Console.WriteLine("Неверный выбор студента.");
+                return;
+            }
+
+            AllCourses[courseIndex].AddStudentInCourse(AllStudents[studentIndex]);
+            Console.WriteLine("Студент успешно добавлен на курс!");
+        }
+
+        static void ShowStudentCourses()
+        {
             if (AllStudents.Count == 0)
             {
-                Console.WriteLine("\nНет студентов для добавления.");
+                Console.WriteLine("Нет студентов в системе.");
+                return;
             }
-            else
+
+            Console.Write("Введите фамилию студента: ");
+            string surname = Console.ReadLine();
+
+            Student foundStudent = AllStudents.Find(s =>
+                s.GetSurname().Equals(surname, StringComparison.OrdinalIgnoreCase));
+
+            if (foundStudent == null)
             {
-                Console.WriteLine("\nДобавление студентов на курс (введите '0', чтобы закончить):");
-                foreach (var s in AllStudents)
+                Console.WriteLine("Студент с такой фамилией не найден.");
+                return;
+            }
+
+            Console.WriteLine($"\nКурсы студента {foundStudent.GetFullName()}:");
+
+            bool found = false;
+
+            foreach (var course in AllCourses)
+            {
+                if (course.IsStudent(foundStudent))
                 {
-                    s.Print();
-                    Console.WriteLine();
-                }
-
-                bool adding = true;
-                while (adding)
-                {
-                    Console.Write("Введите фамилию студента для добавления (или '0' для выхода): ");
-                    string studSurname = Console.ReadLine();
-
-                    if (studSurname == "0")
-                    {
-                        adding = false;
-                        continue;
-                    }
-
-                    Student foundStudent = AllStudents.Find(s => s.GetSurname().Equals(studSurname, StringComparison.OrdinalIgnoreCase));
-
-                    if (foundStudent != null)
-                    {
-                        newCourse.AddStudentInCourse(foundStudent);
-                        Console.WriteLine($" Студент {foundStudent.GetFullName()} добавлен на курс.");
-                    }
-                    else
-                    {
-                        Console.WriteLine(" Студент с такой фамилией не найден.");
-                    }
+                    Console.WriteLine($"- {course.title}");
+                    found = true;
                 }
             }
 
-            AllCourses.Add(newCourse);
-            Console.WriteLine("\n Курс успешно создан и добавлен!");
+            if (!found)
+                Console.WriteLine("Студент пока не записан ни на один курс.");
         }
+
+        static void ShowCourseStudents()
+        {
+            if (AllCourses.Count == 0)
+            {
+                Console.WriteLine("Нет курсов в системе.");
+                return;
+            }
+
+            Console.Write("Введите название курса: ");
+            string title = Console.ReadLine();
+
+            Course foundCourse = AllCourses.Find(c => string.Equals(c.title, title, StringComparison.OrdinalIgnoreCase));
+
+            if (foundCourse == null)
+            {
+                Console.WriteLine("Курс с таким названием не найден.");
+                return;
+            }
+
+            Console.WriteLine($"\nСписок студентов на курсе '{foundCourse.title}':");
+            foundCourse.PrintStudents();
+        }
+
+        static void Main(string[] args)
+        {
+        
     }
-    }
+}
+    
