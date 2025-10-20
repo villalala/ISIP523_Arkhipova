@@ -394,9 +394,7 @@ namespace ISIP523_Arkhipova
 
         static void DisplayMainMenu()
         {
-            Console.WriteLine("\n" + new string('=', 40));
             Console.WriteLine("         БИБЛИОТЕКА КНИГ");
-            Console.WriteLine(new string('=', 40));
             Console.WriteLine("1. Добавить книгу");
             Console.WriteLine("2. Удалить книгу");
             Console.WriteLine("3. Найти книги");
@@ -407,7 +405,6 @@ namespace ISIP523_Arkhipova
             Console.WriteLine("8. Статистика библиотеки");
             Console.WriteLine("9. Заполнить тестовыми данными");
             Console.WriteLine("0. Выход");
-            Console.WriteLine(new string('=', 40));
             Console.Write("Ваш выбор: ");
         }
 
@@ -415,7 +412,6 @@ namespace ISIP523_Arkhipova
         {
             Console.WriteLine("Добро пожаловать в систему управления библиотекой!");
 
-            // Автоматическое заполнение тестовыми данными при запуске
             InitializeTestData();
 
             while (true)
