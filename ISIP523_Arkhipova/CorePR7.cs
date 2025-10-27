@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace ISIP523_Arkhipova
 {
-    internal class Program
+    internal class CorePR7
     {
-        static void Main(string[] args)
-        {
-
-        }
+        public static auto_prEntities Context = new auto_prEntities();
     }
 }
