@@ -56,7 +56,7 @@ namespace ISIP523_Arkhipova
             nowHP = Math.Max(0, nowHP - uron);
         }
 
-        public void lechenie (int zdorovie)
+        public void lechenie ()
         {
             nowHP = maxHP;
         }
@@ -152,7 +152,82 @@ namespace ISIP523_Arkhipova
                 new predmet("Мантия неведимка", "dospehi", 5, 8)
             };
         }
+
+        public void nachalo()
+        {
+            Console.WriteLine("Добро пожаловать в самую лучшую игру в вашей жизни!");
+            Console.WriteLine("Каждый ход вас ждет либо сундук, либо встреча с врагом.");
+            Console.WriteLine("Каждые 10 ходов вас ждет встреча с боссом!\n");
+
+            while (igrok.zhiv)
+            {
+                schetHodov++;
+                Console.WriteLine($"=== Ход {schetHodov} ===");
+
+                if (rand.Next(2) == 0)
+                {
+                    obrSunduk();
+                }
+                else
+                {
+                    obrVragi();
+                }
+
+                if (igrok.zhiv)
+                {
+                    Console.WriteLine("Нажмите Enter для следующего хода...");
+                    Console.ReadLine();
+                }
+            }
+            Console.WriteLine($"\nИгра окончена! Вы прошли {schetHodov} ходов.");
+        }
+
+        private void obrSunduk()
+        {
+            Console.WriteLine("Поздравляю! Вы нашли сундук.");
+
+            int tip = rand.Next(3);
+            if (tip == 0)
+            {
+                predmet newOruzie = oruzie[rand.Next(oruzie.Count)];
+                Console.WriteLine($"В сундуке {newOruzie}");
+                Console.WriteLine($"Ваше текущее оружие: {igrok.oruzie}";
+                Console.WriteLine("Взять новое оружие? (да/нет)");
+                string vibor = Console.ReadLine();
+                if (vibor == "да")
+                {
+                    igrok.oruzie = newOruzie;
+                    Console.WriteLine($"Вы экипировали {newOruzie}";
+                }
+            }
+            else if (tip == 1) {
+                predmet newDospeh = dospehi[rand.Next(dospehi.Count)];
+                Console.WriteLine($"В сундуке {newDospeh}");
+                Console.WriteLine($"Ваши текущие доспехи: {igrok.dospehi}");
+                Console.WriteLine("Взять новые доспехи? (да/нет)");
+                string vibor = Console.ReadLine();
+                if (vibor == "да")
+                {
+                    igrok.dospehi = newDospeh;
+                    Console.WriteLine($"Вы надели {newDospeh}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Вы нашли лечебное зелье!");
+                igrok.lechenie();
+                Console.WriteLine("Ваше здоровье полностью вылечено!");
+            }
+        }
+
+            private void obrVragi()
+            {
+                
+            }
+        }
     }
+    
+    
     internal class Program
     {
         static void Main(string[] args)
