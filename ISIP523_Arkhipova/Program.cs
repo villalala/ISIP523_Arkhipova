@@ -81,6 +81,7 @@ namespace ISIP523_Arkhipova
 
         public zlodei(string nazvanie, int hp, int atk, int zachit)
         {
+            this.name = nazvanie;
             maxHP = hp;
             nowHP = maxHP;
             ataka = atk;
@@ -100,6 +101,58 @@ namespace ISIP523_Arkhipova
         }
     }
 
+    class game
+    {
+        private int schetHodov;
+        public player igrok;
+        public Random rand;
+
+        private List<zlodei> zlodei;
+        private List<predmet> oruzie;
+        private List<predmet> dospehi;
+
+        private game()
+        {
+            schetHodov = 0;
+            igrok = new player();
+            rand = new Random();
+            InicialVragi();
+            InicialPredmeti();
+        }
+
+        private void InicialVragi()
+        {
+            zlodei = new List<zlodei>
+        {
+            new zlodei("Гоблин", 30, 8, 3) { shansKrita = 0.2 },
+            new zlodei("Скелет", 25, 10, 2) { ignorZachita = true },
+            new zlodei("Маг", 20, 12, 1) { shansZamorozki = 0.25 },
+
+            new zlodei("ВВГ (Босс Гоблин)", 60, 12, 4) { shansKrita = 0.3 },
+            new zlodei("Ковальский (Босс Скелет)", 63, 13, 3) { ignorZachita = true },
+            new zlodei("Архимаг C++ (Босс Маг)", 36, 19, 1) { shansZamorozki = 0.35 },
+            new zlodei("Пестов С-- (Босс Скелет)", 33, 18, 1) { ignorZachita = true, shansZamorozki = 0.15 },
+            };
+        }
+
+        private void InicialPredmeti()
+        {
+            oruzie = new List<predmet>
+            {
+                new predmet("Деревянный меч", "oruzhie", 8, 0),
+                new predmet("Железный клинок", "oruzhie", 15, 0),
+                new predmet("Волшебный посох", "oruzhie", 12, 3),
+                new predmet("Топор воина", "oruzhie", 18, 0)
+            };
+            dospehi = new List<predmet>
+            {
+                new predmet("Кожаная броня", "dospehi", 0, 5),
+                new predmet("Железная броня", "dospehi", 0, 10),
+                new predmet("Алмазная броня", "dospehi", 0, 15),
+                new predmet("Мантия неведимка", "dospehi", 5, 8)
+            };
+        }
+    }
     internal class Program
     {
         static void Main(string[] args)
