@@ -20,7 +20,17 @@ namespace ISIP523_Arkhipova
             ataka = atk;
             zaschita = def;
         }
+        public override string ToString()
+        {
+            if (tip == "оружие")
+                return $"{nazvanie}; атака: {ataka}";
+            if (tip == "доспехи")
+                return $"{nazvanie}; защита: {zaschita}";
+            else
+                return nazvanie;
+        }
     }
+
     class player
     {
         public int maxHP;
@@ -57,7 +67,39 @@ namespace ISIP523_Arkhipova
         }
     }
 
-    class 
+    class zlodei
+    {
+        public int maxHP;
+        public int nowHP;
+        public string name;
+        public int ataka;
+        public int zachita;
+        public double shansKrita;
+        public double shansZamorozki;
+        public bool ignorZachita;
+        public bool zhiv => nowHP > 0;
+
+        public zlodei(string nazvanie, int hp, int atk, int zachit)
+        {
+            maxHP = hp;
+            nowHP = maxHP;
+            ataka = atk;
+            zachita = zachit;
+            shansKrita = 0;
+            shansZamorozki = 0;
+            ignorZachita = false;
+        }
+        public void poluchenieUrona(int uron)
+        {
+            nowHP = Math.Max(0, nowHP - uron);
+        }
+
+        public override string ToString()
+        {
+            return $"{name}; атака: {ataka}, защита: {zachita}";
+        }
+    }
+
     internal class Program
     {
         static void Main(string[] args)
