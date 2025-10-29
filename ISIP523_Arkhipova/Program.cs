@@ -283,6 +283,54 @@ namespace ISIP523_Arkhipova
                     Console.WriteLine($"Вы победили {vrag.name}!");
                     break;
                 }
+
+                Console.WriteLine($"\nХод {vrag.name}:");
+                int uronVraga = vrag.ataka;
+                string soobshenie = $"{vrag.name} атакует. Урон: {uronVraga}";
+
+                if (vrag.shansKrita > 0 && rand.NextDouble() < vrag.shansKrita)
+                {
+                    uronVraga *= 2;
+                    soobshenie = $"{vrag.name} наносит критический удар! Урон: {uronVraga}";
+                }
+
+                if (vrag.shansZamorozki > 0 && rand.NextDouble() < vrag.shansZamorozki)
+                {
+                    igrok.zamorozka = true;
+                    soobshenie = $"{vrag.name} замораживает вас! Вы пропустите следующий ход.";
+                }
+                Console.WriteLine(soobshenie);
+
+                if (igrokZaschita)
+                {
+                    if (rand.NextDouble() < 0.4)
+                    {
+                        Console.WriteLine("Вы полностью уклонились от атаки!");
+                    }
+                    else
+                    {
+                        double prozentBloka = rand.NextDouble() * 0.3 + 0.7;
+                        int zablokirovanniyUron = (int)(igrok.zachita * prozentBloka);
+                        int realniyUron = Math.Max(0, uronVraga - zablokirovanniyUron);
+
+                        if (vrag.ignorZachita)
+                        {
+                            realniyUron = uronVraga;
+                            Console.WriteLine($"{vrag.name} игнорирует вашу защиту!");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Вы блокируете {zablokirovanniyUron} урона!");
+                        }
+
+                        if (realniyUron > 0)
+                        {
+                            igrok.poluchenieUrona(realniyUron);
+                            Console.WriteLine($"Вы получаете {realniyUron} урона!");
+                        }
+                    }
+                    igrokZaschita = false;
+                }
             }
 
             }
