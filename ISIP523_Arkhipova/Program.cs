@@ -331,7 +331,36 @@ namespace ISIP523_Arkhipova
                     }
                     igrokZaschita = false;
                 }
+                else
+                {
+                    if (vrag.ignorZachita)
+                    {
+                        igrok.poluchenieUrona(uronVraga);
+                        Console.WriteLine($"{vrag.name} игнорирует защиту! Вы получаете {uronVraga} урона!");
+                    }
+                    else
+                    {
+                        int realniyUron = Math.Max(0, uronVraga - igrok.zachita);
+                        igrok.poluchenieUrona(realniyUron);
+                        Console.WriteLine($"Вы получаете {realniyUron} урона!");
+                    }
+                }
+
+                if (igrok.zhiv && vrag.zhiv)
+                {
+                    Console.WriteLine($"\nПосле раунда:");
+                    Console.WriteLine($"{igrok}");
+                    Console.WriteLine($"{vrag}");
+                }
             }
+
+            if (!igrok.zhiv)
+            {
+                Console.WriteLine("Вы погибли...");
+            }
+        }
+    }
+}
 
             }
         }
