@@ -50,13 +50,13 @@ namespace ISIP523_Arkhipova
             dospehi = new predmet("Кожанные штаны", "доспехи", 0, 2);
             zamorozka = false;
         }
-      
+
         public void poluchenieUrona(int uron)
         {
             nowHP = Math.Max(0, nowHP - uron);
         }
 
-        public void lechenie ()
+        public void lechenie()
         {
             nowHP = maxHP;
         }
@@ -107,7 +107,7 @@ namespace ISIP523_Arkhipova
         public player igrok;
         public Random rand;
 
-        private List<zlodei> zlodei;
+        private List<zlodei> vrag;
         private List<predmet> oruzie;
         private List<predmet> dospehi;
 
@@ -122,7 +122,7 @@ namespace ISIP523_Arkhipova
 
         private void InicialVragi()
         {
-            zlodei = new List<zlodei>
+            vrag = new List<zlodei>
         {
             new zlodei("Гоблин", 30, 8, 3) { shansKrita = 0.2 },
             new zlodei("Скелет", 25, 10, 2) { ignorZachita = true },
@@ -191,16 +191,17 @@ namespace ISIP523_Arkhipova
             {
                 predmet newOruzie = oruzie[rand.Next(oruzie.Count)];
                 Console.WriteLine($"В сундуке {newOruzie}");
-                Console.WriteLine($"Ваше текущее оружие: {igrok.oruzie}";
+                Console.WriteLine($"Ваше текущее оружие: {igrok.oruzie}");
                 Console.WriteLine("Взять новое оружие? (да/нет)");
                 string vibor = Console.ReadLine();
                 if (vibor == "да")
                 {
                     igrok.oruzie = newOruzie;
-                    Console.WriteLine($"Вы экипировали {newOruzie}";
+                    Console.WriteLine($"Вы экипировали {newOruzie}");
                 }
             }
-            else if (tip == 1) {
+            else if (tip == 1)
+            {
                 predmet newDospeh = dospehi[rand.Next(dospehi.Count)];
                 Console.WriteLine($"В сундуке {newDospeh}");
                 Console.WriteLine($"Ваши текущие доспехи: {igrok.dospehi}");
@@ -220,19 +221,81 @@ namespace ISIP523_Arkhipova
             }
         }
 
-            private void obrVragi()
+        private void obrVragi()
+        {
+            zlodei zlodei;
+            if (schetHodov % 10 == 0)
             {
-                
+                zlodei = vrag[rand.Next(3, 7)];
+                Console.WriteLine($"Вы встретили босса {zlodei.name}!");
+            }
+            else
+            {
+                zlodei = vrag[rand.Next(3)];
+                Console.WriteLine($"Вы встретили врага {zlodei.name}");
+            }
+
+            bitva(zlodei);
+        }
+
+        private void bitva(zlodei vrag)
+        {
+            bool igrokZaschita = false;
+
+            while (igrok.zhiv && vrag.zhiv)
+            {
+                if (!igrok.zamorozka)
+                {
+                    Console.WriteLine($"{igrok}");
+                    Console.WriteLine("1 - Атаковать");
+                    Console.WriteLine("2 - Защищаться");
+                    Console.Write("Ваш выбор: ");
+
+                    string vibor = Console.ReadLine();
+
+                    if (vibor == "1")
+                    {
+                        int uron = igrok.ataka;
+                        vrag.poluchenieUrona(uron);
+                        Console.WriteLine($"Вы атакуете и наносите {uron} урона!");
+                        igrokZaschita = false;
+                    }
+                    else if (vibor == "2")
+                    {
+                        Console.WriteLine("Вы готовитесь к защите...");
+                        igrokZaschita = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Неверный ввод, вы пропускаете ход!");
+                        igrokZaschita = false;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Вы заморожены и пропускаете ход!");
+                    igrok.zamorozka = false;
+                    igrokZaschita = false;
+                }
+
+                if (!vrag.zhiv)
+                {
+                    Console.WriteLine($"Вы победили {vrag.name}!");
+                    break;
+                }
+            }
+
+            }
+        }
+
+
+        internal class Program
+        {
+            static void Main(string[] args)
+            {
+
             }
         }
     }
-    
-    
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
-
-        }
-    }
 }
+
