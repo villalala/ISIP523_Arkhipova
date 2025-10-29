@@ -111,7 +111,7 @@ namespace ISIP523_Arkhipova
         private List<predmet> oruzie;
         private List<predmet> dospehi;
 
-        private game()
+        public game()
         {
             schetHodov = 0;
             igrok = new player();
@@ -124,14 +124,14 @@ namespace ISIP523_Arkhipova
         {
             vrag = new List<zlodei>
         {
-            new zlodei("Гоблин", 30, 8, 3) { shansKrita = 0.2 },
-            new zlodei("Скелет", 25, 10, 2) { ignorZachita = true },
-            new zlodei("Маг", 20, 12, 1) { shansZamorozki = 0.25 },
+            new zlodei("Гоблин", 30, 4, 3) { shansKrita = 0.2 },
+            new zlodei("Скелет", 25, 6, 2) { ignorZachita = true },
+            new zlodei("Маг", 20, 8, 1) { shansZamorozki = 0.25 },
 
             new zlodei("ВВГ (Босс Гоблин)", 60, 12, 4) { shansKrita = 0.3 },
             new zlodei("Ковальский (Босс Скелет)", 63, 13, 3) { ignorZachita = true },
             new zlodei("Архимаг C++ (Босс Маг)", 36, 19, 1) { shansZamorozki = 0.35 },
-            new zlodei("Пестов С-- (Босс Скелет)", 33, 18, 1) { ignorZachita = true, shansZamorozki = 0.15 },
+            new zlodei("Пестов С-- (Босс Скелет)", 3, 18, 1) { ignorZachita = true, shansZamorozki = 0.15 },
             };
         }
 
@@ -158,6 +158,7 @@ namespace ISIP523_Arkhipova
             Console.WriteLine("Добро пожаловать в самую лучшую игру в вашей жизни!");
             Console.WriteLine("Каждый ход вас ждет либо сундук, либо встреча с врагом.");
             Console.WriteLine("Каждые 10 ходов вас ждет встреча с боссом!\n");
+            Console.WriteLine($"Ваше снаряжение: оружие - \"Руки\" 5, 0; доспехи - \"Кожанные штаны\", 0, 2 "); 
 
             while (igrok.zhiv)
             {
@@ -360,19 +361,12 @@ namespace ISIP523_Arkhipova
             }
         }
     }
-}
-
-            }
-        }
-
-
-        internal class Program
+    internal class Program
+    {
+        static void Main(string[] args)
         {
-            static void Main(string[] args)
-            {
-
-            }
+            game igra = new game();
+            igra.nachalo();
         }
     }
 }
-
