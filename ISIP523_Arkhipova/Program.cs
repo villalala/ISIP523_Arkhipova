@@ -1,372 +1,445 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ISIP523_Arkhipova
 {
-    class predmet
+    class Program
     {
-        public string nazvanie;
-        public string tip;
-        public int ataka;
-        public int zaschita;
+        static Random rand = new Random();
 
-        public predmet(string nazvanie, string tip, int atk, int def)
+        enum Sunduk
         {
-            this.nazvanie = nazvanie;
-            this.tip = tip;
-            ataka = atk;
-            zaschita = def;
-        }
-        public override string ToString()
-        {
-            if (tip == "оружие")
-                return $"{nazvanie}; атака: {ataka}";
-            if (tip == "доспехи")
-                return $"{nazvanie}; защита: {zaschita}";
-            else
-                return nazvanie;
-        }
-    }
-
-    class player
-    {
-        public int maxHP;
-        public int nowHP;
-        public predmet oruzie;
-        public predmet dospehi;
-        public bool zamorozka;
-        public bool zhiv => nowHP > 0;
-        public int ataka => oruzie.ataka;
-        public int zachita => dospehi.zaschita;
-
-        public player()
-        {
-            maxHP = 100;
-            nowHP = maxHP;
-            oruzie = new predmet("Руки", "оружие", 5, 0);
-            dospehi = new predmet("Кожанные штаны", "доспехи", 0, 2);
-            zamorozka = false;
+            derevyanniy_mec = 1,
+            jelezniy_klinok,
+            volshebniy_posoh,
+            topor_voina,
+            kojanaya_bronya,
+            jeleznaya_bronya,
+            almaznaya_bronya,
+            mantia_nevidimka,
+            lechebnoe_zele
         }
 
-        public void poluchenieUrona(int uron)
+        class player
         {
-            nowHP = Math.Max(0, nowHP - uron);
-        }
+            public double nowHP;
+            public double ataka;
+            public double zachita;
 
-        public void lechenie()
-        {
-            nowHP = maxHP;
-        }
-
-        public override string ToString()
-        {
-            return $"Игрок (HP: {nowHP}/{maxHP}, Атака: {ataka}, Защита: {zachita})";
-        }
-    }
-
-    class zlodei
-    {
-        public int maxHP;
-        public int nowHP;
-        public string name;
-        public int ataka;
-        public int zachita;
-        public double shansKrita;
-        public double shansZamorozki;
-        public bool ignorZachita;
-        public bool zhiv => nowHP > 0;
-
-        public zlodei(string nazvanie, int hp, int atk, int zachit)
-        {
-            this.name = nazvanie;
-            maxHP = hp;
-            nowHP = maxHP;
-            ataka = atk;
-            zachita = zachit;
-            shansKrita = 0;
-            shansZamorozki = 0;
-            ignorZachita = false;
-        }
-        public void poluchenieUrona(int uron)
-        {
-            nowHP = Math.Max(0, nowHP - uron);
-        }
-
-        public override string ToString()
-        {
-            return $"{name}; атака: {ataka}, защита: {zachita}";
-        }
-    }
-
-    class game
-    {
-        private int schetHodov;
-        public player igrok;
-        public Random rand;
-
-        private List<zlodei> vrag;
-        private List<predmet> oruzie;
-        private List<predmet> dospehi;
-
-        public game()
-        {
-            schetHodov = 0;
-            igrok = new player();
-            rand = new Random();
-            InicialVragi();
-            InicialPredmeti();
-        }
-
-        private void InicialVragi()
-        {
-            vrag = new List<zlodei>
-        {
-            new zlodei("Гоблин", 30, 4, 3) { shansKrita = 0.2 },
-            new zlodei("Скелет", 25, 6, 2) { ignorZachita = true },
-            new zlodei("Маг", 20, 8, 1) { shansZamorozki = 0.25 },
-
-            new zlodei("ВВГ (Босс Гоблин)", 60, 12, 4) { shansKrita = 0.3 },
-            new zlodei("Ковальский (Босс Скелет)", 63, 13, 3) { ignorZachita = true },
-            new zlodei("Архимаг C++ (Босс Маг)", 36, 19, 1) { shansZamorozki = 0.35 },
-            new zlodei("Пестов С-- (Босс Скелет)", 3, 18, 1) { ignorZachita = true, shansZamorozki = 0.15 },
-            };
-        }
-
-        private void InicialPredmeti()
-        {
-            oruzie = new List<predmet>
+            public player(double nowHP, double ataka, double zachita)
             {
-                new predmet("Деревянный меч", "oruzhie", 8, 0),
-                new predmet("Железный клинок", "oruzhie", 15, 0),
-                new predmet("Волшебный посох", "oruzhie", 12, 3),
-                new predmet("Топор воина", "oruzhie", 18, 0)
-            };
-            dospehi = new List<predmet>
-            {
-                new predmet("Кожаная броня", "dospehi", 0, 5),
-                new predmet("Железная броня", "dospehi", 0, 10),
-                new predmet("Алмазная броня", "dospehi", 0, 15),
-                new predmet("Мантия неведимка", "dospehi", 5, 8)
-            };
-        }
-
-        public void nachalo()
-        {
-            Console.WriteLine("Добро пожаловать в самую лучшую игру в вашей жизни!");
-            Console.WriteLine("Каждый ход вас ждет либо сундук, либо встреча с врагом.");
-            Console.WriteLine("Каждые 10 ходов вас ждет встреча с боссом!\n");
-            Console.WriteLine($"Ваше снаряжение: оружие - \"Руки\" 5, 0; доспехи - \"Кожанные штаны\", 0, 2 "); 
-
-            while (igrok.zhiv)
-            {
-                schetHodov++;
-                Console.WriteLine($"=== Ход {schetHodov} ===");
-
-                if (rand.Next(2) == 0)
-                {
-                    obrSunduk();
-                }
-                else
-                {
-                    obrVragi();
-                }
-
-                if (igrok.zhiv)
-                {
-                    Console.WriteLine("Нажмите Enter для следующего хода...");
-                    Console.ReadLine();
-                }
+                this.nowHP = nowHP;
+                this.ataka = ataka;
+                this.zachita = zachita;
             }
-            Console.WriteLine($"\nИгра окончена! Вы прошли {schetHodov} ходов.");
         }
 
-        private void obrSunduk()
+        class zlodei
         {
-            Console.WriteLine("Поздравляю! Вы нашли сундук.");
+            public string name;
+            public double nowHP;
+            public double ataka;
+            public double zachita;
 
-            int tip = rand.Next(3);
-            if (tip == 0)
+            public zlodei(string name, double nowHP, double ataka, double zachita)
             {
-                predmet newOruzie = oruzie[rand.Next(oruzie.Count)];
-                Console.WriteLine($"В сундуке {newOruzie}");
-                Console.WriteLine($"Ваше текущее оружие: {igrok.oruzie}");
-                Console.WriteLine("Взять новое оружие? (да/нет)");
-                string vibor = Console.ReadLine();
-                if (vibor == "да")
-                {
-                    igrok.oruzie = newOruzie;
-                    Console.WriteLine($"Вы экипировали {newOruzie}");
-                }
+                this.name = name;
+                this.nowHP = nowHP;
+                this.ataka = ataka;
+                this.zachita = zachita;
             }
-            else if (tip == 1)
+
+            public virtual double uronIgroku(player igrok)
             {
-                predmet newDospeh = dospehi[rand.Next(dospehi.Count)];
-                Console.WriteLine($"В сундуке {newDospeh}");
-                Console.WriteLine($"Ваши текущие доспехи: {igrok.dospehi}");
-                Console.WriteLine("Взять новые доспехи? (да/нет)");
-                string vibor = Console.ReadLine();
-                if (vibor == "да")
+                double uron = ataka - igrok.zachita;
+                if (uron < 0)
                 {
-                    igrok.dospehi = newDospeh;
-                    Console.WriteLine($"Вы надели {newDospeh}");
+                    uron = 0;
                 }
+                return uron;
+            }
+        }
+
+        class Goblin : zlodei
+        {
+            public double shansKrita;
+            public Goblin(string name = "Гоблин", double nowHP = 30, double ataka = 8, double zachita = 3, double shansKrita = 20)
+                : base(name, nowHP, ataka, zachita)
+            {
+                this.shansKrita = shansKrita;
+            }
+
+            public override double uronIgroku(player igrok)
+            {
+                double uron = ataka - igrok.zachita;
+                if (rand.Next(100) < shansKrita)
+                {
+                    uron = uron * 2;
+                    Console.WriteLine("Крит. удар!");
+                }
+                if (uron < 0)
+                {
+                    uron = 0;
+                }
+                return uron;
+            }
+        }
+
+        class Sceleton : zlodei
+        {
+            public Sceleton(string name = "Скелет", double nowHP = 25, double ataka = 10, double zachita = 2)
+                 : base(name, nowHP, ataka, zachita) { }
+
+            public override double uronIgroku(player igrok)
+            {
+                double uron = ataka;
+                if (uron < 0)
+                {
+                    uron = 0;
+                }
+                return uron;
+            }
+        }
+
+        class Mage : zlodei
+        {
+            public double shansZamorozki;
+            public bool zamorojen = false;
+
+            public Mage(string name = "Маг", double nowHP = 20, double ataka = 12, double zachita = 1, double shansZamorozki = 25)
+                : base(name, nowHP, ataka, zachita)
+            {
+                this.shansZamorozki = shansZamorozki;
+            }
+
+            public bool zamorozitIgroka()
+            {
+                bool holod = rand.Next(100) < shansZamorozki;
+                return holod;
+            }
+        }
+
+        class VVG : Goblin
+        {
+            public VVG(string name = "ВВГ - босс гоблинов", double nowHP = 60, double ataka = 12, double zachita = 4, double shansKrita = 30)
+                : base(name, nowHP, ataka, zachita, shansKrita)
+            {
+            }
+        }
+
+        class Kovalski : Sceleton
+        {
+            public Kovalski(string name = "Ковальский - босс скелетов", double nowHP = 63, double ataka = 13, double zachita = 3)
+                : base(name, nowHP, ataka, zachita)
+            {
+            }
+        }
+
+        class ArhiMaks : Mage
+        {
+            public ArhiMaks(string name = "Архимаг C++ - босс магов", double nowHP = 36, double ataka = 19, double zachita = 1, double shansZamorozki = 35)
+                : base(name, nowHP, ataka, zachita, shansZamorozki)
+            {
+            }
+        }
+
+        class Pestov : Sceleton
+        {
+            public double shansZamorozki;
+            public bool zamorojen = false;
+
+            public Pestov(string name = "Пестов С-- - босс скелетов", double nowHP = 33, double ataka = 18, double zachita = 1, double shansZamorozki = 15)
+                : base(name, nowHP, ataka, zachita)
+            {
+                this.shansZamorozki = shansZamorozki;
+            }
+
+            public bool zamorozitIgroka()
+            {
+                bool holod = rand.Next(100) < shansZamorozki;
+                return holod;
+            }
+        }
+
+        static zlodei viborVraga()
+        {
+            int ch = rand.Next(3);
+            switch (ch)
+            {
+                case 0: return new Goblin();
+                case 1: return new Sceleton();
+                case 2: return new Mage();
+                default: return new Mage();
+            }
+        }
+
+        static zlodei viborBossa()
+        {
+            int ch = rand.Next(4);
+            switch (ch)
+            {
+                case 0: return new VVG();
+                case 1: return new Kovalski();
+                case 2: return new ArhiMaks();
+                case 3: return new Pestov();
+                default: return new ArhiMaks();
+            }
+        }
+
+        static void smenaDospehov(player igrok, double novayaZaschita)
+        {
+            Console.WriteLine($"Текущая защита - {igrok.zachita}.");
+            Console.WriteLine("Вы хотите сменить броню? (да/нет)");
+            string otvet = Console.ReadLine().ToLower();
+
+            if (otvet == "да")
+            {
+                igrok.zachita = novayaZaschita;
+                Console.WriteLine($"Экипирована новая броня! Текущая защита - {igrok.zachita}");
             }
             else
             {
-                Console.WriteLine("Вы нашли лечебное зелье!");
-                igrok.lechenie();
-                Console.WriteLine("Ваше здоровье полностью вылечено!");
+                Console.WriteLine($"Вы оставили свою броню.");
             }
         }
 
-        private void obrVragi()
+        static void smenaOruzhia(player igrok, double novayaAtaka)
         {
-            zlodei zlodei;
-            if (schetHodov % 10 == 0)
+            Console.WriteLine($"Ваша текущая атака - {igrok.ataka}.");
+            Console.WriteLine("Вы хотите сменить оружие? (да/нет)");
+            string otvet = Console.ReadLine().ToLower();
+
+            if (otvet == "да")
             {
-                zlodei = vrag[rand.Next(3, 7)];
-                Console.WriteLine($"Вы встретили босса {zlodei.name}!");
+                igrok.ataka = novayaAtaka;
+                Console.WriteLine($"Экипировано новое оружие! Текущая атака - {igrok.ataka} ");
             }
             else
             {
-                zlodei = vrag[rand.Next(3)];
-                Console.WriteLine($"Вы встретили врага {zlodei.name}");
+                Console.WriteLine($"Вы оставили своё оружие.");
             }
-
-            bitva(zlodei);
         }
 
-        private void bitva(zlodei vrag)
+        static void otkritSunduk(player igrok)
         {
+            Sunduk loot = (Sunduk)rand.Next(1, 10);
+            switch (loot)
+            {
+                case Sunduk.derevyanniy_mec:
+                    Console.WriteLine("Вам выпал деревянный меч! +8 к атаке.");
+                    smenaOruzhia(igrok, 8);
+                    break;
+
+                case Sunduk.jelezniy_klinok:
+                    Console.WriteLine("Вам выпал железный клинок! +15 к атаке.");
+                    smenaOruzhia(igrok, 15);
+                    break;
+
+                case Sunduk.volshebniy_posoh:
+                    Console.WriteLine("Вам выпал волшебный посох! +12 к атаке.");
+                    smenaOruzhia(igrok, 12);
+                    break;
+
+                case Sunduk.topor_voina:
+                    Console.WriteLine("Вам выпал топор воина! +18 к атаке.");
+                    smenaOruzhia(igrok, 18);
+                    break;
+
+                case Sunduk.kojanaya_bronya:
+                    Console.WriteLine("Вам выпала кожаная броня! +5 к защите.");
+                    smenaDospehov(igrok, 5);
+                    break;
+
+                case Sunduk.jeleznaya_bronya:
+                    Console.WriteLine("Вам выпала железная броня! +10 к защите.");
+                    smenaDospehov(igrok, 10);
+                    break;
+
+                case Sunduk.almaznaya_bronya:
+                    Console.WriteLine("Вам выпала алмазная броня! +15 к защите.");
+                    smenaDospehov(igrok, 15);
+                    break;
+
+                case Sunduk.mantia_nevidimka:
+                    Console.WriteLine("Вам выпала мантия невидимка! +8 к защите.");
+                    smenaDospehov(igrok, 8);
+                    break;
+
+                case Sunduk.lechebnoe_zele:
+                    Console.WriteLine("Вам выпало лечебное зелье! ХП полностью восстановлены.");
+                    igrok.nowHP = 100;
+                    break;
+            }
+        }
+
+        static void bitva(player igrok, zlodei vrag)
+        {
+            Console.WriteLine($"Вам повстречался враг {vrag.name} !");
+
             bool igrokZaschita = false;
+            bool zamorozka = false;
 
-            while (igrok.zhiv && vrag.zhiv)
+            while (igrok.nowHP > 0 && vrag.nowHP > 0)
             {
-                if (!igrok.zamorozka)
+                if (!zamorozka)
                 {
-                    Console.WriteLine($"{igrok}");
-                    Console.WriteLine("1 - Атаковать");
-                    Console.WriteLine("2 - Защищаться");
-                    Console.Write("Ваш выбор: ");
+                    Console.WriteLine("Ход игрока: выберите действие:");
+                    Console.WriteLine("1 - Атака");
+                    Console.WriteLine("2 - Защита (40% уклонение, иначе блок 70–100% от брони)");
 
-                    string vibor = Console.ReadLine();
+                    string deistvie = Console.ReadLine();
+                    igrokZaschita = deistvie == "2";
 
-                    if (vibor == "1")
+                    if (!igrokZaschita)
                     {
-                        int uron = igrok.ataka;
-                        vrag.poluchenieUrona(uron);
-                        Console.WriteLine($"Вы атакуете и наносите {uron} урона!");
-                        igrokZaschita = false;
-                    }
-                    else if (vibor == "2")
-                    {
-                        Console.WriteLine("Вы готовитесь к защите...");
-                        igrokZaschita = true;
+                        double uronIgroka = igrok.ataka - vrag.zachita;
+                        if (uronIgroka < 0) uronIgroka = 0;
+
+                        vrag.nowHP -= uronIgroka;
+                        if (vrag.nowHP < 0)
+                            vrag.nowHP = 0;
+                        Console.WriteLine($"Вы атаковали! Нанесено {uronIgroka} урона. У {vrag.name} осталось {vrag.nowHP} HP.");
                     }
                     else
                     {
-                        Console.WriteLine("Неверный ввод, вы пропускаете ход!");
-                        igrokZaschita = false;
+                        Console.WriteLine("Вы заняли оборону! Готовитесь к удару врага...");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Вы заморожены и пропускаете ход!");
-                    igrok.zamorozka = false;
+                    Console.WriteLine("❄️ Вы заморожены и пропускаете ход!");
+                    zamorozka = false;
                     igrokZaschita = false;
                 }
 
-                if (!vrag.zhiv)
+                if (vrag.nowHP <= 0)
                 {
-                    Console.WriteLine($"Вы победили {vrag.name}!");
-                    break;
+                    Console.WriteLine($"{vrag.name} повержен!");
+                    return;
                 }
 
                 Console.WriteLine($"\nХод {vrag.name}:");
-                int uronVraga = vrag.ataka;
+                double uronVraga = vrag.uronIgroku(igrok);
                 string soobshenie = $"{vrag.name} атакует. Урон: {uronVraga}";
 
-                if (vrag.shansKrita > 0 && rand.NextDouble() < vrag.shansKrita)
+                if (vrag is Mage mag)
                 {
-                    uronVraga *= 2;
-                    soobshenie = $"{vrag.name} наносит критический удар! Урон: {uronVraga}";
+                    if (mag.zamorozitIgroka())
+                    {
+                        zamorozka = true;
+                        soobshenie = $"{vrag.name} замораживает вас! Вы пропустите следующий ход.";
+                        uronVraga = 0;
+                    }
+                }
+                else if (vrag is Pestov pestov)
+                {
+                    if (pestov.zamorozitIgroka())
+                    {
+                        zamorozka = true;
+                        soobshenie = $"{vrag.name} замораживает вас! Вы пропустите следующий ход.";
+                        uronVraga = 0;
+                    }
                 }
 
-                if (vrag.shansZamorozki > 0 && rand.NextDouble() < vrag.shansZamorozki)
-                {
-                    igrok.zamorozka = true;
-                    soobshenie = $"{vrag.name} замораживает вас! Вы пропустите следующий ход.";
-                }
                 Console.WriteLine(soobshenie);
 
                 if (igrokZaschita)
                 {
-                    if (rand.NextDouble() < 0.4)
+                    if (rand.Next(100) < 40)
                     {
-                        Console.WriteLine("Вы полностью уклонились от атаки!");
+                        Console.WriteLine("Вы уклонились от атаки!");
+                        uronVraga = 0;
                     }
                     else
                     {
-                        double prozentBloka = rand.NextDouble() * 0.3 + 0.7;
-                        int zablokirovanniyUron = (int)(igrok.zachita * prozentBloka);
-                        int realniyUron = Math.Max(0, uronVraga - zablokirovanniyUron);
+                        double silaBloka = igrok.zachita * (rand.Next(70, 101) / 100.0);
+                        uronVraga -= silaBloka;
+                        if (uronVraga < 0) uronVraga = 0;
 
-                        if (vrag.ignorZachita)
-                        {
-                            realniyUron = uronVraga;
-                            Console.WriteLine($"{vrag.name} игнорирует вашу защиту!");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Вы блокируете {zablokirovanniyUron} урона!");
-                        }
-
-                        if (realniyUron > 0)
-                        {
-                            igrok.poluchenieUrona(realniyUron);
-                            Console.WriteLine($"Вы получаете {realniyUron} урона!");
-                        }
+                        Console.WriteLine($"Блок! Урон снижен бронёй ({silaBloka}).");
                     }
                     igrokZaschita = false;
                 }
-                else
+
+                igrok.nowHP -= uronVraga;
+                Console.WriteLine($"Вы получили {uronVraga} урона. ");
+                Console.WriteLine($"Здоровье: {igrok.nowHP} HP");
+
+                if (igrok.nowHP <= 0)
                 {
-                    if (vrag.ignorZachita)
+                    Console.WriteLine("Игрок погиб... Игра окончена.");
+                    return;
+                }
+
+                if (igrok.nowHP > 0 && vrag.nowHP > 0)
+                {
+                    Console.WriteLine($"\nПосле раунда:");
+                    Console.WriteLine($"Игрок: {igrok.nowHP} HP");
+                    Console.WriteLine($"{vrag.name}: {vrag.nowHP} HP");
+                }
+            }
+        }
+
+        static void Main(string[] args)
+        {
+            player igrok = new player(100, 5, 2);
+
+            Console.WriteLine("Добро пожаловать в лучшую текстовую игру в вашей жизни!");
+            Console.WriteLine("Каждый ход вас ждет либо сундук, либо встреча с врагом!");
+            Console.WriteLine("Каждые 10 ходов вас ждет встреча с боссом!\n");
+            Console.WriteLine($"Ваше снаряжение: оружие - \"Руки\" урон: 5; доспехи - \"Кожанные штаны\" защита: 2");
+
+            int schetHodov = 1;
+
+            while (igrok.nowHP > 0)
+            {
+                Console.WriteLine($"Ход {schetHodov}");
+
+                Console.WriteLine($"Здоровье: {igrok.nowHP} HP");
+                Console.WriteLine($"Атака - {igrok.ataka}");
+                Console.WriteLine($"Защита - {igrok.zachita}");
+
+                if (rand.Next(2) == 0)
+                {
+                    if (schetHodov % 10 == 0)
                     {
-                        igrok.poluchenieUrona(uronVraga);
-                        Console.WriteLine($"{vrag.name} игнорирует защиту! Вы получаете {uronVraga} урона!");
+                        Console.WriteLine("ВНИМАНИЕ! Появился босс!");
+
+                        zlodei boss = viborBossa();
+                        bitva(igrok, boss);
                     }
                     else
                     {
-                        int realniyUron = Math.Max(0, uronVraga - igrok.zachita);
-                        igrok.poluchenieUrona(realniyUron);
-                        Console.WriteLine($"Вы получаете {realniyUron} урона!");
+                        zlodei vrag = viborVraga();
+                        bitva(igrok, vrag);
+                    }
+
+                    if (igrok.nowHP <= 0)
+                    {
+                        Console.WriteLine("Вы погибли... Игра окончена!");
+                        break;
                     }
                 }
-
-                if (igrok.zhiv && vrag.zhiv)
+                else
                 {
-                    Console.WriteLine($"\nПосле раунда:");
-                    Console.WriteLine($"{igrok}");
-                    Console.WriteLine($"{vrag}");
+                    Console.WriteLine("Вы нашли сундук! Открыть? (да/нет)");
+
+                    string otvet = Console.ReadLine().ToLower();
+                    if (otvet == "да") otkritSunduk(igrok);
+                    else Console.WriteLine("Вы прошли мимо сундука.");
+                }
+
+                schetHodov++;
+
+                if (igrok.nowHP > 0)
+                {
+                    Console.WriteLine("\nНажмите Enter для следующего хода...");
+                    Console.ReadLine();
                 }
             }
 
-            if (!igrok.zhiv)
-            {
-                Console.WriteLine("Вы погибли...");
-            }
-        }
-    }
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
-            game igra = new game();
-            igra.nachalo();
+            Console.WriteLine($"\nИгра окончена! Вы прошли {schetHodov - 1} ходов.");
+            Console.WriteLine("Спасибо за игру!");
         }
     }
 }
