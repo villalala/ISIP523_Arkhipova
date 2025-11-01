@@ -94,4 +94,67 @@ namespace ISIP523_Arkhipova
             }
         }
 
-        
+        static void ServiceClient(player player, ref bool game, ref int carsServiced,
+                                  List<(int detalID, int Quantity, int Remaining)> pendingDeliveries)
+        {
+            var random = new Random();
+
+            var client = new client
+            {
+                car = new[] { "Lada", "Toyota", "BMW", "Audi", "Ford" }[random.Next(5)]
+            };
+            CorePR7.Context.client.Add(client);
+            CorePR7.Context.SaveChanges();
+
+            var detals = CorePR7.Context.detal.ToList();
+            var brokendetal = detals[random.Next(detals.Count)];
+
+            Console.WriteLine($"Приехал клиент ({client.car}), сломалась деталь: {brokendetal.name}");
+            Console.Write("Принять заказ? (да/нет): ");
+            if (Console.ReadLine()?.ToLower() != "да")
+            {
+                decimal fine = 200;
+                player.balans -= (int)fine;
+
+                var processRecord = new process
+                {
+                    ID_client = client.ID_client,
+                    ID_player = player.ID_player,
+                    status = "Отказано",
+                    price = 0,
+                    nuzna_detal = brokendetal.ID_detal,
+                    postavilli_detal = null
+                };
+                CorePR7.Context.process.Add(processRecord);
+                CorePR7.Context.SaveChanges();
+                Console.WriteLine($"Штраф: {fine}. Баланс: {player.balans}");
+                return;
+            }
+
+            var skladItem = CorePR7.Context.sklad
+                .Where(s => s.ID_player == player.ID_player)
+                .Join(CorePR7.Context.zakaz, s => s.ID_zakaz, z => z.ID_zakaz, (s, z) => new { s, z })
+                .FirstOrDefault(x => x.z.ID_detal == brokendetal.ID_detal && x.s.kol_vo > 0);
+
+            if (skladItem != null)
+            {
+                skladItem.s.kol_vo--;
+
+                decimal repairPrice = (decimal)(brokendetal.price * 1.5);
+                player.balans += (int)repairPrice;
+                player.pochinki++;
+
+                var processRecord = new process
+                {
+                    ID_client = client.ID_client,
+                    ID_player = player.ID_player,
+                    status = "Выполнен",
+                    price = (float)repairPrice,
+                    nuzna_detal = brokendetal.ID_detal,
+                    postavilli_detal = brokendetal.ID_detal
+                };
+                CorePR7.Context.process.Add(processRecord);
+                CorePR7.Context.SaveChanges();
+                Console.WriteLine($"Ремонт выполнен! Баланс: {player.balans}");
+            }
+            
