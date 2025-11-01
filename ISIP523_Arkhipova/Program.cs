@@ -222,5 +222,70 @@ namespace ISIP523_Arkhipova
 
             CorePR7.Context.SaveChanges();
         }
+        static void Purchasedetals(player player, List<(int detalID, int Quantity, int Remaining)> pendingDeliveries)
+        {
+            Console.WriteLine("\nДетали для заказа:");
+            var detals = CorePR7.Context.detal.ToList();
+            for (int i = 0; i < detals.Count; i++)
+                Console.WriteLine($"{i + 1}. {detals[i].name} — {detals[i].price}");
 
-       
+            Console.WriteLine("\nВаш склад:");
+            var playerSklad = CorePR7.Context.sklad
+                .Where(s => s.ID_player == player.ID_player)
+                .Join(CorePR7.Context.zakaz, s => s.ID_zakaz, z => z.ID_zakaz, (s, z) => new { s, z })
+                .Join(CorePR7.Context.detal, x => x.z.ID_detal, d => d.ID_detal, (x, d) => new { detalName = d.name, Quantity = x.s.kol_vo })
+                .ToList();
+
+            if (playerSklad.Count == 0)
+            {
+                Console.WriteLine("На данный момент на складе ничего нет.");
+            }
+            else
+            {
+                foreach (var item in playerSklad)
+                {
+                    Console.WriteLine($"{item.detalName} — Количество: {item.Quantity}");
+                }
+            }
+
+            Console.Write("Введите номер детали: ");
+            if (!int.TryParse(Console.ReadLine(), out int choice) || choice < 1 || choice > detals.Count)
+                return;
+
+            var detal = detals[choice - 1];
+            Console.Write("Введите количество: ");
+            if (!int.TryParse(Console.ReadLine(), out int qty) || qty <= 0)
+                return;
+
+            decimal cost = (decimal)detal.price * qty;
+            if (player.balans < cost)
+            {
+                Console.WriteLine("Недостаточно средств!");
+                return;
+            }
+
+            player.balans -= (int)cost;
+
+            pendingDeliveries.Add((detal.ID_detal, qty, 2));
+            CorePR7.Context.SaveChanges();
+
+            Console.WriteLine($"Заказано {qty} шт. {detal.name} за {cost}. Прибудет после 2 клиентов.");
+        }
+
+        static void CheckPendingDeliveries(player player, List<(int detalID, int Quantity, int Remaining)> pendingDeliveries)
+        {
+            if (pendingDeliveries.Count == 0)
+            {
+                Console.WriteLine("Нет ожидаемых поставок.");
+                return;
+            }
+
+            Console.WriteLine("Ожидаемые поставки:");
+            foreach (var d in pendingDeliveries)
+            {
+                var detal = CorePR7.Context.detal.First(p => p.ID_detal == d.detalID);
+                Console.WriteLine($"{detal.name} количество: {d.Quantity} — прибудет через {d.Remaining} клиента(ов)");
+            }
+        }
+    }
+}
