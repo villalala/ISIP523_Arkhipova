@@ -307,7 +307,7 @@ namespace ISIP523_Arkhipova
                 }
                 else
                 {
-                    Console.WriteLine("❄️ Вы заморожены и пропускаете ход!");
+                    Console.WriteLine("Вы заморожены и пропускаете ход!");
                     zamorozka = false;
                     igrokZaschita = false;
                 }
