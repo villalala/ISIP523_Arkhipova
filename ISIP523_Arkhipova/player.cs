@@ -24,6 +24,7 @@ namespace ISIP523_Arkhipova
         public int ID_player { get; set; }
         public string name { get; set; }
         public int balans { get; set; }
+        public int pochinki { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<process> process { get; set; }

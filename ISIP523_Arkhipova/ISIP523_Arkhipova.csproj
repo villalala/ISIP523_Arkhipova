@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
-      <HintPath>.\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\WpfApp1\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>.\EntityFramework.SqlServer.dll</HintPath>
