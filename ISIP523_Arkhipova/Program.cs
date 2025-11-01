@@ -157,4 +157,70 @@ namespace ISIP523_Arkhipova
                 CorePR7.Context.SaveChanges();
                 Console.WriteLine($"Ремонт выполнен! Баланс: {player.balans}");
             }
-            
+            else
+            {
+                Console.WriteLine("Нет нужной детали. Клиент уехал.");
+                player.balans = player.balans - 4000;
+                Console.WriteLine($"Штраф: 4000. Баланс: {player.balans}");
+                var processRecord = new process
+                {
+                    ID_client = client.ID_client,
+                    ID_player = player.ID_player,
+                    status = "Клиент уехал",
+                    price = 0,
+                    nuzna_detal = brokendetal.ID_detal,
+                    postavilli_detal = null
+                };
+                CorePR7.Context.process.Add(processRecord);
+                CorePR7.Context.SaveChanges();
+            }
+
+            carsServiced++;
+
+            for (int i = 0; i < pendingDeliveries.Count; i++)
+            {
+                var delivery = pendingDeliveries[i];
+                delivery.Remaining--;
+                if (delivery.Remaining <= 0)
+                {
+                    var zakaz = new zakaz
+                    {
+                        ID_detal = delivery.detalID,
+                        kol_vo = delivery.Quantity
+                    };
+                    CorePR7.Context.zakaz.Add(zakaz);
+                    CorePR7.Context.SaveChanges();
+
+                    var existingSklad = CorePR7.Context.sklad
+                        .Where(s => s.ID_player == player.ID_player)
+                        .Join(CorePR7.Context.zakaz, s => s.ID_zakaz, z => z.ID_zakaz, (s, z) => new { s, z })
+                        .FirstOrDefault(x => x.z.ID_detal == delivery.detalID);
+
+                    if (existingSklad == null)
+                    {
+                        CorePR7.Context.sklad.Add(new sklad
+                        {
+                            ID_zakaz = zakaz.ID_zakaz,
+                            ID_player = player.ID_player,
+                            kol_vo = delivery.Quantity
+                        });
+                    }
+                    else
+                    {
+                        existingSklad.s.kol_vo += delivery.Quantity;
+                    }
+
+                    Console.WriteLine($"Поставка деталей ({delivery.Quantity} шт.) прибыла на склад!");
+                    pendingDeliveries.RemoveAt(i);
+                    i--;
+                }
+                else
+                {
+                    pendingDeliveries[i] = delivery;
+                }
+            }
+
+            CorePR7.Context.SaveChanges();
+        }
+
+       
