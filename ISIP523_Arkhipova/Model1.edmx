@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="client">
           <Key>
             <PropertyRef Name="ID_client" />
@@ -27,6 +27,7 @@
           <Property Name="ID_player" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="balans" Type="int" Nullable="false" />
+          <Property Name="pochinki" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="process">
           <Key>
@@ -188,8 +189,7 @@
             <End Role="zakaz" EntitySet="zakaz" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -221,6 +221,7 @@
           <Property Name="balans" Type="Int32" Nullable="false" />
           <NavigationProperty Name="process" Relationship="Self.FK_process_player" FromRole="player" ToRole="process" />
           <NavigationProperty Name="sklad" Relationship="Self.FK_sklad_player" FromRole="player" ToRole="sklad" />
+          <Property Name="pochinki" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="process">
           <Key>
@@ -416,6 +417,7 @@
           <EntitySetMapping Name="player">
             <EntityTypeMapping TypeName="Model.player">
               <MappingFragment StoreEntitySet="player">
+                <ScalarProperty Name="pochinki" ColumnName="pochinki" />
                 <ScalarProperty Name="ID_player" ColumnName="ID_player" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="balans" ColumnName="balans" />
