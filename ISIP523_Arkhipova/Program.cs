@@ -34,7 +34,8 @@ namespace ISIP523_Arkhipova
                 CorePR7.Context.detal.Add(new detal { name = "Тормоза", price = 3000 });
                 CorePR7.Context.detal.Add(new detal { name = "Фары", price = 2000 });
                 CorePR7.Context.SaveChanges();
-                Console.WriteLine("Базовые детали добавлены в базу данных.");
+                Console.WriteLine("Базовые детали дод" +
+                    "бавлены в базу данных.");
             }
             else
             {
