@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="718d73589f164375866acb19caea4184" Name="Diagram1" ZoomLevel="83">
+        <EntityTypeShape EntityType="PR8_shopModel.korzina" Width="1.5" PointX="4.75" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PR8_shopModel.product" Width="1.5" PointX="2.875" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PR8_shopModel.product_korzina" Width="1.5" PointX="6.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PR8_shopModel.pvz" Width="1.5" PointX="1" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PR8_shopModel.sysdiagrams" Width="1.5" PointX="6.625" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PR8_shopModel.user" Width="1.5" PointX="1" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PR8_shopModel.zakaz" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PR8_shopModel.zakaz_product" Width="1.5" PointX="5" PointY="0.875" IsExpanded="true" />
+        <AssociationConnector Association="PR8_shopModel.FK_korzina_user" ManuallyRouted="false" />
+        <AssociationConnector Association="PR8_shopModel.FK_product_korzina_korzina" ManuallyRouted="false" />
+        <AssociationConnector Association="PR8_shopModel.FK_product_korzina_product" ManuallyRouted="false" />
+        <AssociationConnector Association="PR8_shopModel.FK_zakaz_product_product" ManuallyRouted="false" />
+        <AssociationConnector Association="PR8_shopModel.FK_zakaz_pvz" ManuallyRouted="false" />
+        <AssociationConnector Association="PR8_shopModel.FK_zakaz_user" ManuallyRouted="false" />
+        <AssociationConnector Association="PR8_shopModel.FK_zakaz_user1" ManuallyRouted="false" />
+        <AssociationConnector Association="PR8_shopModel.FK_zakaz_product_zakaz" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

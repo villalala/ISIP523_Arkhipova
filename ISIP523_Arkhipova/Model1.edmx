@@ -1,0 +1,548 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище PR8_shopModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="korzina">
+          <Key>
+            <PropertyRef Name="ID_korzina" />
+          </Key>
+          <Property Name="ID_korzina" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_user" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="ID_product" />
+          </Key>
+          <Property Name="ID_product" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="opisanie" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="price" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="product_korzina">
+          <Key>
+            <PropertyRef Name="ID_product_korzina" />
+          </Key>
+          <Property Name="ID_product_korzina" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_product" Type="int" Nullable="false" />
+          <Property Name="ID_korzina" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="pvz">
+          <Key>
+            <PropertyRef Name="ID_pvz" />
+          </Key>
+          <Property Name="ID_pvz" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="city" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="adress" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="ID_user" />
+          </Key>
+          <Property Name="ID_user" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="login" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="zakaz">
+          <Key>
+            <PropertyRef Name="ID_zakaz" />
+          </Key>
+          <Property Name="ID_zakaz" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_user" Type="int" Nullable="false" />
+          <Property Name="ID_pvz" Type="int" Nullable="false" />
+          <Property Name="data" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="zakaz_product">
+          <Key>
+            <PropertyRef Name="ID_zakaz_product" />
+          </Key>
+          <Property Name="ID_zakaz_product" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_zakaz" Type="int" Nullable="false" />
+          <Property Name="ID_product" Type="int" Nullable="false" />
+          <Property Name="price" Type="float" Nullable="false" />
+          <Property Name="kol_vo" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_korzina_user">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="korzina" Type="Self.korzina" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="ID_user" />
+            </Principal>
+            <Dependent Role="korzina">
+              <PropertyRef Name="ID_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_korzina_korzina">
+          <End Role="korzina" Type="Self.korzina" Multiplicity="1" />
+          <End Role="product_korzina" Type="Self.product_korzina" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="korzina">
+              <PropertyRef Name="ID_korzina" />
+            </Principal>
+            <Dependent Role="product_korzina">
+              <PropertyRef Name="ID_korzina" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_korzina_product">
+          <End Role="product" Type="Self.product" Multiplicity="1" />
+          <End Role="product_korzina" Type="Self.product_korzina" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="ID_product" />
+            </Principal>
+            <Dependent Role="product_korzina">
+              <PropertyRef Name="ID_product" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_zakaz_product_product">
+          <End Role="product" Type="Self.product" Multiplicity="1" />
+          <End Role="zakaz_product" Type="Self.zakaz_product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="ID_product" />
+            </Principal>
+            <Dependent Role="zakaz_product">
+              <PropertyRef Name="ID_product" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_zakaz_product_zakaz">
+          <End Role="zakaz" Type="Self.zakaz" Multiplicity="1" />
+          <End Role="zakaz_product" Type="Self.zakaz_product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="zakaz">
+              <PropertyRef Name="ID_zakaz" />
+            </Principal>
+            <Dependent Role="zakaz_product">
+              <PropertyRef Name="ID_zakaz" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_zakaz_pvz">
+          <End Role="pvz" Type="Self.pvz" Multiplicity="1" />
+          <End Role="zakaz" Type="Self.zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pvz">
+              <PropertyRef Name="ID_pvz" />
+            </Principal>
+            <Dependent Role="zakaz">
+              <PropertyRef Name="ID_pvz" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_zakaz_user">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="zakaz" Type="Self.zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="ID_user" />
+            </Principal>
+            <Dependent Role="zakaz">
+              <PropertyRef Name="ID_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_zakaz_user1">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="zakaz" Type="Self.zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="ID_user" />
+            </Principal>
+            <Dependent Role="zakaz">
+              <PropertyRef Name="ID_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище PR8_shopModelContainer">
+          <EntitySet Name="korzina" EntityType="Self.korzina" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="product" EntityType="Self.product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="product_korzina" EntityType="Self.product_korzina" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pvz" EntityType="Self.pvz" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="zakaz" EntityType="Self.zakaz" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="zakaz_product" EntityType="Self.zakaz_product" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_korzina_user" Association="Self.FK_korzina_user">
+            <End Role="user" EntitySet="user" />
+            <End Role="korzina" EntitySet="korzina" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_korzina_korzina" Association="Self.FK_product_korzina_korzina">
+            <End Role="korzina" EntitySet="korzina" />
+            <End Role="product_korzina" EntitySet="product_korzina" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_korzina_product" Association="Self.FK_product_korzina_product">
+            <End Role="product" EntitySet="product" />
+            <End Role="product_korzina" EntitySet="product_korzina" />
+          </AssociationSet>
+          <AssociationSet Name="FK_zakaz_product_product" Association="Self.FK_zakaz_product_product">
+            <End Role="product" EntitySet="product" />
+            <End Role="zakaz_product" EntitySet="zakaz_product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_zakaz_product_zakaz" Association="Self.FK_zakaz_product_zakaz">
+            <End Role="zakaz" EntitySet="zakaz" />
+            <End Role="zakaz_product" EntitySet="zakaz_product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_zakaz_pvz" Association="Self.FK_zakaz_pvz">
+            <End Role="pvz" EntitySet="pvz" />
+            <End Role="zakaz" EntitySet="zakaz" />
+          </AssociationSet>
+          <AssociationSet Name="FK_zakaz_user" Association="Self.FK_zakaz_user">
+            <End Role="user" EntitySet="user" />
+            <End Role="zakaz" EntitySet="zakaz" />
+          </AssociationSet>
+          <AssociationSet Name="FK_zakaz_user1" Association="Self.FK_zakaz_user1">
+            <End Role="user" EntitySet="user" />
+            <End Role="zakaz" EntitySet="zakaz" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PR8_shopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="korzina">
+          <Key>
+            <PropertyRef Name="ID_korzina" />
+          </Key>
+          <Property Name="ID_korzina" Type="Int32" Nullable="false" />
+          <Property Name="ID_user" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="user" Relationship="Self.FK_korzina_user" FromRole="korzina" ToRole="user" />
+          <NavigationProperty Name="product_korzina" Relationship="Self.FK_product_korzina_korzina" FromRole="korzina" ToRole="product_korzina" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="ID_product" />
+          </Key>
+          <Property Name="ID_product" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="opisanie" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="price" Type="Double" Nullable="false" />
+          <NavigationProperty Name="product_korzina" Relationship="Self.FK_product_korzina_product" FromRole="product" ToRole="product_korzina" />
+          <NavigationProperty Name="zakaz_product" Relationship="Self.FK_zakaz_product_product" FromRole="product" ToRole="zakaz_product" />
+        </EntityType>
+        <EntityType Name="product_korzina">
+          <Key>
+            <PropertyRef Name="ID_product_korzina" />
+          </Key>
+          <Property Name="ID_product_korzina" Type="Int32" Nullable="false" />
+          <Property Name="ID_product" Type="Int32" Nullable="false" />
+          <Property Name="ID_korzina" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="korzina" Relationship="Self.FK_product_korzina_korzina" FromRole="product_korzina" ToRole="korzina" />
+          <NavigationProperty Name="product" Relationship="Self.FK_product_korzina_product" FromRole="product_korzina" ToRole="product" />
+        </EntityType>
+        <EntityType Name="pvz">
+          <Key>
+            <PropertyRef Name="ID_pvz" />
+          </Key>
+          <Property Name="ID_pvz" Type="Int32" Nullable="false" />
+          <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="adress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="zakaz" Relationship="Self.FK_zakaz_pvz" FromRole="pvz" ToRole="zakaz" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="ID_user" />
+          </Key>
+          <Property Name="ID_user" Type="Int32" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="korzina" Relationship="Self.FK_korzina_user" FromRole="user" ToRole="korzina" />
+          <NavigationProperty Name="zakaz" Relationship="Self.FK_zakaz_user" FromRole="user" ToRole="zakaz" />
+          <NavigationProperty Name="zakaz1" Relationship="Self.FK_zakaz_user1" FromRole="user" ToRole="zakaz" />
+        </EntityType>
+        <EntityType Name="zakaz">
+          <Key>
+            <PropertyRef Name="ID_zakaz" />
+          </Key>
+          <Property Name="ID_zakaz" Type="Int32" Nullable="false" />
+          <Property Name="ID_user" Type="Int32" Nullable="false" />
+          <Property Name="ID_pvz" Type="Int32" Nullable="false" />
+          <Property Name="data" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="pvz" Relationship="Self.FK_zakaz_pvz" FromRole="zakaz" ToRole="pvz" />
+          <NavigationProperty Name="user" Relationship="Self.FK_zakaz_user" FromRole="zakaz" ToRole="user" />
+          <NavigationProperty Name="user1" Relationship="Self.FK_zakaz_user1" FromRole="zakaz" ToRole="user" />
+          <NavigationProperty Name="zakaz_product" Relationship="Self.FK_zakaz_product_zakaz" FromRole="zakaz" ToRole="zakaz_product" />
+        </EntityType>
+        <EntityType Name="zakaz_product">
+          <Key>
+            <PropertyRef Name="ID_zakaz_product" />
+          </Key>
+          <Property Name="ID_zakaz_product" Type="Int32" Nullable="false" />
+          <Property Name="ID_zakaz" Type="Int32" Nullable="false" />
+          <Property Name="ID_product" Type="Int32" Nullable="false" />
+          <Property Name="price" Type="Double" Nullable="false" />
+          <Property Name="kol_vo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="product" Relationship="Self.FK_zakaz_product_product" FromRole="zakaz_product" ToRole="product" />
+          <NavigationProperty Name="zakaz" Relationship="Self.FK_zakaz_product_zakaz" FromRole="zakaz_product" ToRole="zakaz" />
+        </EntityType>
+        <Association Name="FK_korzina_user">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="korzina" Type="Self.korzina" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="ID_user" />
+            </Principal>
+            <Dependent Role="korzina">
+              <PropertyRef Name="ID_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_korzina_korzina">
+          <End Role="korzina" Type="Self.korzina" Multiplicity="1" />
+          <End Role="product_korzina" Type="Self.product_korzina" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="korzina">
+              <PropertyRef Name="ID_korzina" />
+            </Principal>
+            <Dependent Role="product_korzina">
+              <PropertyRef Name="ID_korzina" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_korzina_product">
+          <End Role="product" Type="Self.product" Multiplicity="1" />
+          <End Role="product_korzina" Type="Self.product_korzina" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="ID_product" />
+            </Principal>
+            <Dependent Role="product_korzina">
+              <PropertyRef Name="ID_product" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_zakaz_product_product">
+          <End Role="product" Type="Self.product" Multiplicity="1" />
+          <End Role="zakaz_product" Type="Self.zakaz_product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="ID_product" />
+            </Principal>
+            <Dependent Role="zakaz_product">
+              <PropertyRef Name="ID_product" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_zakaz_pvz">
+          <End Role="pvz" Type="Self.pvz" Multiplicity="1" />
+          <End Role="zakaz" Type="Self.zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pvz">
+              <PropertyRef Name="ID_pvz" />
+            </Principal>
+            <Dependent Role="zakaz">
+              <PropertyRef Name="ID_pvz" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_zakaz_user">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="zakaz" Type="Self.zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="ID_user" />
+            </Principal>
+            <Dependent Role="zakaz">
+              <PropertyRef Name="ID_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_zakaz_user1">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="zakaz" Type="Self.zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="ID_user" />
+            </Principal>
+            <Dependent Role="zakaz">
+              <PropertyRef Name="ID_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_zakaz_product_zakaz">
+          <End Role="zakaz" Type="Self.zakaz" Multiplicity="1" />
+          <End Role="zakaz_product" Type="Self.zakaz_product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="zakaz">
+              <PropertyRef Name="ID_zakaz" />
+            </Principal>
+            <Dependent Role="zakaz_product">
+              <PropertyRef Name="ID_zakaz" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PR8_shopEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="korzina" EntityType="Self.korzina" />
+          <EntitySet Name="product" EntityType="Self.product" />
+          <EntitySet Name="product_korzina" EntityType="Self.product_korzina" />
+          <EntitySet Name="pvz" EntityType="Self.pvz" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="user" EntityType="Self.user" />
+          <EntitySet Name="zakaz" EntityType="Self.zakaz" />
+          <EntitySet Name="zakaz_product" EntityType="Self.zakaz_product" />
+          <AssociationSet Name="FK_korzina_user" Association="Self.FK_korzina_user">
+            <End Role="user" EntitySet="user" />
+            <End Role="korzina" EntitySet="korzina" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_korzina_korzina" Association="Self.FK_product_korzina_korzina">
+            <End Role="korzina" EntitySet="korzina" />
+            <End Role="product_korzina" EntitySet="product_korzina" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_korzina_product" Association="Self.FK_product_korzina_product">
+            <End Role="product" EntitySet="product" />
+            <End Role="product_korzina" EntitySet="product_korzina" />
+          </AssociationSet>
+          <AssociationSet Name="FK_zakaz_product_product" Association="Self.FK_zakaz_product_product">
+            <End Role="product" EntitySet="product" />
+            <End Role="zakaz_product" EntitySet="zakaz_product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_zakaz_pvz" Association="Self.FK_zakaz_pvz">
+            <End Role="pvz" EntitySet="pvz" />
+            <End Role="zakaz" EntitySet="zakaz" />
+          </AssociationSet>
+          <AssociationSet Name="FK_zakaz_user" Association="Self.FK_zakaz_user">
+            <End Role="user" EntitySet="user" />
+            <End Role="zakaz" EntitySet="zakaz" />
+          </AssociationSet>
+          <AssociationSet Name="FK_zakaz_user1" Association="Self.FK_zakaz_user1">
+            <End Role="user" EntitySet="user" />
+            <End Role="zakaz" EntitySet="zakaz" />
+          </AssociationSet>
+          <AssociationSet Name="FK_zakaz_product_zakaz" Association="Self.FK_zakaz_product_zakaz">
+            <End Role="zakaz" EntitySet="zakaz" />
+            <End Role="zakaz_product" EntitySet="zakaz_product" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище PR8_shopModelContainer" CdmEntityContainer="PR8_shopEntities">
+          <EntitySetMapping Name="korzina">
+            <EntityTypeMapping TypeName="PR8_shopModel.korzina">
+              <MappingFragment StoreEntitySet="korzina">
+                <ScalarProperty Name="ID_korzina" ColumnName="ID_korzina" />
+                <ScalarProperty Name="ID_user" ColumnName="ID_user" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="product">
+            <EntityTypeMapping TypeName="PR8_shopModel.product">
+              <MappingFragment StoreEntitySet="product">
+                <ScalarProperty Name="ID_product" ColumnName="ID_product" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="opisanie" ColumnName="opisanie" />
+                <ScalarProperty Name="price" ColumnName="price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="product_korzina">
+            <EntityTypeMapping TypeName="PR8_shopModel.product_korzina">
+              <MappingFragment StoreEntitySet="product_korzina">
+                <ScalarProperty Name="ID_product_korzina" ColumnName="ID_product_korzina" />
+                <ScalarProperty Name="ID_product" ColumnName="ID_product" />
+                <ScalarProperty Name="ID_korzina" ColumnName="ID_korzina" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pvz">
+            <EntityTypeMapping TypeName="PR8_shopModel.pvz">
+              <MappingFragment StoreEntitySet="pvz">
+                <ScalarProperty Name="ID_pvz" ColumnName="ID_pvz" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="adress" ColumnName="adress" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="PR8_shopModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user">
+            <EntityTypeMapping TypeName="PR8_shopModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="ID_user" ColumnName="ID_user" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="login" ColumnName="login" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="zakaz">
+            <EntityTypeMapping TypeName="PR8_shopModel.zakaz">
+              <MappingFragment StoreEntitySet="zakaz">
+                <ScalarProperty Name="ID_zakaz" ColumnName="ID_zakaz" />
+                <ScalarProperty Name="ID_user" ColumnName="ID_user" />
+                <ScalarProperty Name="ID_pvz" ColumnName="ID_pvz" />
+                <ScalarProperty Name="data" ColumnName="data" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="zakaz_product">
+            <EntityTypeMapping TypeName="PR8_shopModel.zakaz_product">
+              <MappingFragment StoreEntitySet="zakaz_product">
+                <ScalarProperty Name="ID_zakaz_product" ColumnName="ID_zakaz_product" />
+                <ScalarProperty Name="ID_zakaz" ColumnName="ID_zakaz" />
+                <ScalarProperty Name="ID_product" ColumnName="ID_product" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="kol_vo" ColumnName="kol_vo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
