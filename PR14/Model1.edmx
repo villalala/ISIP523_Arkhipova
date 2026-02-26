@@ -4,19 +4,19 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище cinemaModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище cinemaModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AgeRating">
           <Key>
             <PropertyRef Name="AgeRatingID" />
           </Key>
-          <Property Name="AgeRatingID" Type="int" Nullable="false" />
-          <Property Name="FilmID" Type="int" Nullable="false" />
+          <Property Name="AgeRatingID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="8" Nullable="false" />
         </EntityType>
         <EntityType Name="FilmGenre">
           <Key>
             <PropertyRef Name="FilmGenreID" />
           </Key>
-          <Property Name="FilmGenreID" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="FilmGenreID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FilmID" Type="int" Nullable="false" />
           <Property Name="GenreID" Type="int" Nullable="false" />
         </EntityType>
@@ -24,17 +24,19 @@
           <Key>
             <PropertyRef Name="FilmID" />
           </Key>
-          <Property Name="FilmID" Type="int" Nullable="false" />
+          <Property Name="FilmID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FilmName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="RatingID" Type="decimal" Precision="2" Scale="1" Nullable="false" />
+          <Property Name="Rating" Type="float" Nullable="false" />
           <Property Name="Cover" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ShowStartDate" Type="date" Nullable="false" />
+          <Property Name="AgeRatingID" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="Genre">
           <Key>
             <PropertyRef Name="GenreID" />
           </Key>
-          <Property Name="GenreID" Type="int" Nullable="false" />
+          <Property Name="GenreID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="GanreName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="200" Nullable="false" />
         </EntityType>
@@ -42,7 +44,7 @@
           <Key>
             <PropertyRef Name="RoomID" />
           </Key>
-          <Property Name="RoomID" Type="int" Nullable="false" />
+          <Property Name="RoomID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RoomName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="RoomCategoryID" Type="int" Nullable="false" />
         </EntityType>
@@ -50,15 +52,15 @@
           <Key>
             <PropertyRef Name="RoomCategoryID" />
           </Key>
-          <Property Name="RoomCategoryID" Type="int" Nullable="false" />
-          <Property Name="Price" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="RoomCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="6" Scale="2" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Session">
           <Key>
             <PropertyRef Name="SessionID" />
           </Key>
-          <Property Name="SessionID" Type="int" Nullable="false" />
+          <Property Name="SessionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FilmID" Type="int" Nullable="false" />
           <Property Name="RoomID" Type="int" Nullable="false" />
           <Property Name="SessionDate" Type="date" Nullable="false" />
@@ -67,7 +69,7 @@
           <Key>
             <PropertyRef Name="SitID" />
           </Key>
-          <Property Name="SitID" Type="int" Nullable="false" />
+          <Property Name="SitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Number" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="RoomID" Type="int" Nullable="false" />
         </EntityType>
@@ -75,7 +77,7 @@
           <Key>
             <PropertyRef Name="SitSessionID" />
           </Key>
-          <Property Name="SitSessionID" Type="int" Nullable="false" />
+          <Property Name="SitSessionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SessionID" Type="int" Nullable="false" />
           <Property Name="SitID" Type="int" Nullable="false" />
           <Property Name="IsTake" Type="bit" Nullable="false" />
@@ -94,7 +96,7 @@
           <Key>
             <PropertyRef Name="TicketID" />
           </Key>
-          <Property Name="TicketID" Type="int" Nullable="false" />
+          <Property Name="TicketID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="SessionID" Type="int" Nullable="false" />
           <Property Name="SitID" Type="int" Nullable="false" />
@@ -103,23 +105,12 @@
           <Key>
             <PropertyRef Name="UserID" />
           </Key>
-          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="DateOfBirth" Type="date" Nullable="false" />
-          <Property Name="PhoneNumber" Type="int" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Login" Type="nchar" MaxLength="200" Nullable="false" />
         </EntityType>
-        <Association Name="FK_AgeRating_Films">
-          <End Role="Films" Type="Self.Films" Multiplicity="1" />
-          <End Role="AgeRating" Type="Self.AgeRating" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Films">
-              <PropertyRef Name="FilmID" />
-            </Principal>
-            <Dependent Role="AgeRating">
-              <PropertyRef Name="FilmID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_FilmGenre_Films">
           <End Role="Films" Type="Self.Films" Multiplicity="1" />
           <End Role="FilmGenre" Type="Self.FilmGenre" Multiplicity="*" />
@@ -141,6 +132,18 @@
             </Principal>
             <Dependent Role="FilmGenre">
               <PropertyRef Name="GenreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Films_AgeRating">
+          <End Role="AgeRating" Type="Self.AgeRating" Multiplicity="1" />
+          <End Role="Films" Type="Self.Films" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AgeRating">
+              <PropertyRef Name="AgeRatingID" />
+            </Principal>
+            <Dependent Role="Films">
+              <PropertyRef Name="AgeRatingID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -265,10 +268,6 @@
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ticket" EntityType="Self.Ticket" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_AgeRating_Films" Association="Self.FK_AgeRating_Films">
-            <End Role="Films" EntitySet="Films" />
-            <End Role="AgeRating" EntitySet="AgeRating" />
-          </AssociationSet>
           <AssociationSet Name="FK_FilmGenre_Films" Association="Self.FK_FilmGenre_Films">
             <End Role="Films" EntitySet="Films" />
             <End Role="FilmGenre" EntitySet="FilmGenre" />
@@ -276,6 +275,10 @@
           <AssociationSet Name="FK_FilmGenre_Genre" Association="Self.FK_FilmGenre_Genre">
             <End Role="Genre" EntitySet="Genre" />
             <End Role="FilmGenre" EntitySet="FilmGenre" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Films_AgeRating" Association="Self.FK_Films_AgeRating">
+            <End Role="AgeRating" EntitySet="AgeRating" />
+            <End Role="Films" EntitySet="Films" />
           </AssociationSet>
           <AssociationSet Name="FK_Room_RoomCategory" Association="Self.FK_Room_RoomCategory">
             <End Role="RoomCategory" EntitySet="RoomCategory" />
@@ -314,8 +317,7 @@
             <End Role="Ticket" EntitySet="Ticket" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="cinemaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -323,15 +325,15 @@
           <Key>
             <PropertyRef Name="AgeRatingID" />
           </Key>
-          <Property Name="AgeRatingID" Type="Int32" Nullable="false" />
-          <Property Name="FilmID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Films" Relationship="Self.FK_AgeRating_Films" FromRole="AgeRating" ToRole="Films" />
+          <Property Name="AgeRatingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="8" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Films" Relationship="Self.FK_Films_AgeRating" FromRole="AgeRating" ToRole="Films" />
         </EntityType>
         <EntityType Name="FilmGenre">
           <Key>
             <PropertyRef Name="FilmGenreID" />
           </Key>
-          <Property Name="FilmGenreID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="FilmGenreID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FilmID" Type="Int32" Nullable="false" />
           <Property Name="GenreID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Films" Relationship="Self.FK_FilmGenre_Films" FromRole="FilmGenre" ToRole="Films" />
@@ -341,20 +343,22 @@
           <Key>
             <PropertyRef Name="FilmID" />
           </Key>
-          <Property Name="FilmID" Type="Int32" Nullable="false" />
+          <Property Name="FilmID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FilmName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="RatingID" Type="Decimal" Precision="2" Scale="1" Nullable="false" />
+          <Property Name="Rating" Type="Double" Nullable="false" />
           <Property Name="Cover" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ShowStartDate" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="AgeRating" Relationship="Self.FK_AgeRating_Films" FromRole="Films" ToRole="AgeRating" />
+          <Property Name="AgeRatingID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AgeRating" Relationship="Self.FK_Films_AgeRating" FromRole="Films" ToRole="AgeRating" />
           <NavigationProperty Name="FilmGenre" Relationship="Self.FK_FilmGenre_Films" FromRole="Films" ToRole="FilmGenre" />
           <NavigationProperty Name="Session" Relationship="Self.FK_Session_Films" FromRole="Films" ToRole="Session" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="Genre">
           <Key>
             <PropertyRef Name="GenreID" />
           </Key>
-          <Property Name="GenreID" Type="Int32" Nullable="false" />
+          <Property Name="GenreID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="GanreName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="FilmGenre" Relationship="Self.FK_FilmGenre_Genre" FromRole="Genre" ToRole="FilmGenre" />
@@ -363,7 +367,7 @@
           <Key>
             <PropertyRef Name="RoomID" />
           </Key>
-          <Property Name="RoomID" Type="Int32" Nullable="false" />
+          <Property Name="RoomID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RoomName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="RoomCategoryID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="RoomCategory" Relationship="Self.FK_Room_RoomCategory" FromRole="Room" ToRole="RoomCategory" />
@@ -374,8 +378,8 @@
           <Key>
             <PropertyRef Name="RoomCategoryID" />
           </Key>
-          <Property Name="RoomCategoryID" Type="Int32" Nullable="false" />
-          <Property Name="Price" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="RoomCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Price" Type="Decimal" Precision="6" Scale="2" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Room" Relationship="Self.FK_Room_RoomCategory" FromRole="RoomCategory" ToRole="Room" />
         </EntityType>
@@ -383,7 +387,7 @@
           <Key>
             <PropertyRef Name="SessionID" />
           </Key>
-          <Property Name="SessionID" Type="Int32" Nullable="false" />
+          <Property Name="SessionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FilmID" Type="Int32" Nullable="false" />
           <Property Name="RoomID" Type="Int32" Nullable="false" />
           <Property Name="SessionDate" Type="DateTime" Nullable="false" Precision="0" />
@@ -396,7 +400,7 @@
           <Key>
             <PropertyRef Name="SitID" />
           </Key>
-          <Property Name="SitID" Type="Int32" Nullable="false" />
+          <Property Name="SitID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Number" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="RoomID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Room" Relationship="Self.FK_Sit_Room" FromRole="Sit" ToRole="Room" />
@@ -407,7 +411,7 @@
           <Key>
             <PropertyRef Name="SitSessionID" />
           </Key>
-          <Property Name="SitSessionID" Type="Int32" Nullable="false" />
+          <Property Name="SitSessionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SessionID" Type="Int32" Nullable="false" />
           <Property Name="SitID" Type="Int32" Nullable="false" />
           <Property Name="IsTake" Type="Boolean" Nullable="false" />
@@ -428,7 +432,7 @@
           <Key>
             <PropertyRef Name="TicketID" />
           </Key>
-          <Property Name="TicketID" Type="Int32" Nullable="false" />
+          <Property Name="TicketID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="SessionID" Type="Int32" Nullable="false" />
           <Property Name="SitID" Type="Int32" Nullable="false" />
@@ -440,21 +444,22 @@
           <Key>
             <PropertyRef Name="UserID" />
           </Key>
-          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="DateOfBirth" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="PhoneNumber" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Ticket" Relationship="Self.FK_Ticket_User" FromRole="User" ToRole="Ticket" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="200" FixedLength="true" Unicode="true" />
         </EntityType>
-        <Association Name="FK_AgeRating_Films">
-          <End Role="Films" Type="Self.Films" Multiplicity="1" />
-          <End Role="AgeRating" Type="Self.AgeRating" Multiplicity="*" />
+        <Association Name="FK_Films_AgeRating">
+          <End Role="AgeRating" Type="Self.AgeRating" Multiplicity="1" />
+          <End Role="Films" Type="Self.Films" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Films">
-              <PropertyRef Name="FilmID" />
+            <Principal Role="AgeRating">
+              <PropertyRef Name="AgeRatingID" />
             </Principal>
-            <Dependent Role="AgeRating">
-              <PropertyRef Name="FilmID" />
+            <Dependent Role="Films">
+              <PropertyRef Name="AgeRatingID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -603,9 +608,9 @@
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="Ticket" EntityType="Self.Ticket" />
           <EntitySet Name="User" EntityType="Self.User" />
-          <AssociationSet Name="FK_AgeRating_Films" Association="Self.FK_AgeRating_Films">
-            <End Role="Films" EntitySet="Films" />
+          <AssociationSet Name="FK_Films_AgeRating" Association="Self.FK_Films_AgeRating">
             <End Role="AgeRating" EntitySet="AgeRating" />
+            <End Role="Films" EntitySet="Films" />
           </AssociationSet>
           <AssociationSet Name="FK_FilmGenre_Films" Association="Self.FK_FilmGenre_Films">
             <End Role="Films" EntitySet="Films" />
@@ -662,7 +667,7 @@
             <EntityTypeMapping TypeName="cinemaModel.AgeRating">
               <MappingFragment StoreEntitySet="AgeRating">
                 <ScalarProperty Name="AgeRatingID" ColumnName="AgeRatingID" />
-                <ScalarProperty Name="FilmID" ColumnName="FilmID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -678,11 +683,13 @@
           <EntitySetMapping Name="Films">
             <EntityTypeMapping TypeName="cinemaModel.Films">
               <MappingFragment StoreEntitySet="Films">
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="FilmID" ColumnName="FilmID" />
                 <ScalarProperty Name="FilmName" ColumnName="FilmName" />
-                <ScalarProperty Name="RatingID" ColumnName="RatingID" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
                 <ScalarProperty Name="Cover" ColumnName="Cover" />
                 <ScalarProperty Name="ShowStartDate" ColumnName="ShowStartDate" />
+                <ScalarProperty Name="AgeRatingID" ColumnName="AgeRatingID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -766,10 +773,11 @@
           <EntitySetMapping Name="User">
             <EntityTypeMapping TypeName="cinemaModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -23,7 +23,8 @@ namespace PR14
         public int UserID { get; set; }
         public string Username { get; set; }
         public System.DateTime DateOfBirth { get; set; }
-        public int PhoneNumber { get; set; }
+        public string Password { get; set; }
+        public string Login { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ticket> Ticket { get; set; }

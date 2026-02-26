@@ -9,5 +9,6 @@ namespace PR14
     internal class Core
     {
         public static cinemaEntities Context = new cinemaEntities();
+        public static User user {  get; set; }
     }
 }

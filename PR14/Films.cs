@@ -17,19 +17,19 @@ namespace PR14
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Films()
         {
-            this.AgeRating = new HashSet<AgeRating>();
             this.FilmGenre = new HashSet<FilmGenre>();
             this.Session = new HashSet<Session>();
         }
     
         public int FilmID { get; set; }
         public string FilmName { get; set; }
-        public decimal RatingID { get; set; }
+        public double Rating { get; set; }
         public string Cover { get; set; }
         public System.DateTime ShowStartDate { get; set; }
+        public int AgeRatingID { get; set; }
+        public string Description { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AgeRating> AgeRating { get; set; }
+        public virtual AgeRating AgeRating { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FilmGenre> FilmGenre { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

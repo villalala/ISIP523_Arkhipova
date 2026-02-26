@@ -14,7 +14,7 @@ namespace PR14
     
     public partial class FilmGenre
     {
-        public string FilmGenreID { get; set; }
+        public int FilmGenreID { get; set; }
         public int FilmID { get; set; }
         public int GenreID { get; set; }
     

@@ -14,9 +14,16 @@ namespace PR14
     
     public partial class AgeRating
     {
-        public int AgeRatingID { get; set; }
-        public int FilmID { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public AgeRating()
+        {
+            this.Films = new HashSet<Films>();
+        }
     
-        public virtual Films Films { get; set; }
+        public int AgeRatingID { get; set; }
+        public string Name { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Films> Films { get; set; }
     }
 }
