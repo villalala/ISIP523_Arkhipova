@@ -9,6 +9,7 @@
       Title="Mainn"
       Loaded="Page_Loaded"
       Background="#cfb0b0">
+    
 
     <Grid>
         <Grid.RowDefinitions>
@@ -30,7 +31,7 @@
             </StackPanel>
         </StackPanel>
         
-        <ListBox x:Name="FilmsLB" Background="#cfb0b0" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MouseDoubleClick="FilmsLB_MouseDoubleClick" d:ItemsSource="{d:SampleData ItemCount=5}">
+        <ListBox x:Name="FilmsLB" Background="#cfb0b0" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MouseDoubleClick="FilmsLB_MouseDoubleClick" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="FilmsLB_SelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Height="317" Width="220" Background="#BC8F8F">

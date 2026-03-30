@@ -122,5 +122,10 @@ namespace PR14
                 Profile.Visibility = Visibility.Visible;
             }
         }
+
+        private void FilmsLB_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
