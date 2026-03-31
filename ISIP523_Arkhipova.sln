@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISIP523_Arkhipova", "ISIP52
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR14", "PR14\PR14.csproj", "{06057DA1-C3A2-4CE9-A028-C657F8B5BBB9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignInTests", "SignInTests\SignInTests.csproj", "{6EA8FEA0-9FAF-46A2-A68E-3FA1C194E0C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegTest", "RegTest\RegTest.csproj", "{0B3C1072-C021-4FEF-B4C6-C13BB09940CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{06057DA1-C3A2-4CE9-A028-C657F8B5BBB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06057DA1-C3A2-4CE9-A028-C657F8B5BBB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06057DA1-C3A2-4CE9-A028-C657F8B5BBB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EA8FEA0-9FAF-46A2-A68E-3FA1C194E0C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EA8FEA0-9FAF-46A2-A68E-3FA1C194E0C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EA8FEA0-9FAF-46A2-A68E-3FA1C194E0C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EA8FEA0-9FAF-46A2-A68E-3FA1C194E0C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B3C1072-C021-4FEF-B4C6-C13BB09940CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B3C1072-C021-4FEF-B4C6-C13BB09940CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B3C1072-C021-4FEF-B4C6-C13BB09940CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B3C1072-C021-4FEF-B4C6-C13BB09940CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
