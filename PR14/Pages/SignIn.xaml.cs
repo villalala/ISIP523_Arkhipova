@@ -1,22 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PR14.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для SignIn.xaml
+    /// Логика взаимодействия для страницы авторизации
     /// </summary>
     public partial class SignIn : Page
     {
@@ -25,25 +16,39 @@ namespace PR14.Pages
             InitializeComponent();
         }
 
-        private void SignIn_But_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Метод авторизации (для тестов и кнопки)
+        /// </summary>
+        public bool Auth(string login, string password)
         {
-            if (string.IsNullOrEmpty(LoginBT.Text) || string.IsNullOrEmpty(PasswordBT.Text))
-            {
-                MessageBox.Show("Введите логин и пароль!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+            if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
+                return false;
 
             var user = Core.Context.User
-               .FirstOrDefault(u => u.Login == LoginBT.Text && u.Password == PasswordBT.Text);
+                .FirstOrDefault(u => u.Login == login && u.Password == password);
 
             if (user != null)
             {
-                MessageBox.Show($"Добро пожаловать, {user.Username ?? user.Login}!", "Успех");
-                NavigationService.Navigate(new Mainn());
-
+                Core.user = user;
+                return true;
             }
-            Core.user = user;
 
+            return false;
+        }
+
+        private void SignIn_But_Click(object sender, RoutedEventArgs e)
+        {
+            bool success = Auth(LoginBT.Text, PasswordBT.Text);
+
+            if (success)
+            {
+                MessageBox.Show($"Добро пожаловать, {Core.user.Username ?? Core.user.Login}!", "Успех");
+                NavigationService.Navigate(new Mainn());
+            }
+            else
+            {
+                MessageBox.Show("Неверный логин или пароль!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void Exit_But_Click(object sender, RoutedEventArgs e)
