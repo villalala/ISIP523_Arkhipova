@@ -18,17 +18,13 @@
         <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
             <TextBox x:Name="Search" Text="Поиск" Margin="10" Width="200" HorizontalAlignment="Left"/>
             
-            <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Right">
-                <TextBlock Text="Сортировка:" HorizontalAlignment="Right" />
-                <RadioButton x:Name="SortByName" Content="По названию"/>
-                <RadioButton x:Name="SortByRating" Content="По рейтингу"/>
-            </StackPanel>
+           
         </StackPanel>
 
-        <ListBox x:Name="ItemLstBox" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.Row="1">
+        <ListBox x:Name="ItemLstBox" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.Row="1" HorizontalContentAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <WrapPanel>
+                    <WrapPanel Margin="10" Height="100" >
                         <Image Margin="10" Source="{Binding image}" />
                         <Grid>
                             <Grid.RowDefinitions>
@@ -42,7 +38,7 @@
                             <TextBlock Margin="10" Text="{Binding}" Grid.Row="1"/>
                         </Grid>
 
-                        <Button x:Name="GetBtn" Content="Добавить" Height="25" Margin="10"/>
+                        <Button x:Name="GetBtn" Content="Добавить" Height="25" Margin="10" Click="GetBtn_Click"/>
 
                     </WrapPanel>
                 </DataTemplate>

@@ -18,9 +18,9 @@
         <ListBox x:Name="ChoiceLstBox" d:ItemsSource="{d:SampleData ItemCount=5}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Margin="10" Height="100" Width="400">
                         <Image Margin="10" Source="{Binding image}" />
-                        <Grid>
+                        <Grid Width="205">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
@@ -32,7 +32,7 @@
                             <TextBlock Margin="10" Text="{Binding}" Grid.Row="1"/>
                         </Grid>
                        
-                        <Button x:Name="DelBtn" Content="Удалить" Height="25" Margin="10"/>
+                        <Button x:Name="DelBtn" HorizontalAlignment="Right" Content="Удалить" Height="25" Margin="10" Click="DelBtn_Click"/>
                         
                     </StackPanel>
                 </DataTemplate>
@@ -57,7 +57,8 @@
                     <TextBox x:Name="AuthorTextBox" MinWidth="200" />
                 </StackPanel>
 
-                <Button x:Name="SaveBtn" Content="Сохранить" Margin="10" HorizontalAlignment="Center"/>
+                <Button x:Name="SaveBtn" Content="Сохранить" Margin="10" HorizontalAlignment="Center" Click="SaveBtn_Click"/>
+                <Button x:Name="SavePageBtn" Content="Сохраненные сборки" Margin="15" HorizontalAlignment="Center" Click="SavePageBtn_Click"/>
             </StackPanel>
 
             <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="ItemLstBox" Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=5}" >

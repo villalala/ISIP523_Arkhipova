@@ -9,6 +9,6 @@ namespace PR15
     internal class Core
     {
         public static pr15_Entities Context = new pr15_Entities();
-
+        public static List<basepart> sborka = new List<basepart>();
     }
 }
