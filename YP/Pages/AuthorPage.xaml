@@ -1,0 +1,43 @@
+﻿<Page x:Class="YP.Pages.AuthorPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:YP.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AuthorPage"
+      Background="White">
+
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <ListBox x:Name="myBooksList" Grid.Column="0" Margin="10" SelectionChanged="MyBooksList_SelectionChanged">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding name}" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding isFrozen, StringFormat='Статус: {0}'}" FontSize="12" Foreground="#c0392b"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel Grid.Column="1" >
+            <TextBlock Text="Добавить / Редактировать книгу" FontSize="18" FontWeight="Bold" Margin="5"/>
+
+            <TextBox x:Name="titleTB" Width="300" HorizontalAlignment="Left" Margin="5" Text="Название книги"/>
+            <TextBox x:Name="coverTB" Width="300" HorizontalAlignment="Left" Margin="5" Text="Ссылка на обложку"/>
+            <TextBox x:Name="descTB" Width="300" HorizontalAlignment="Left" Margin="5" Text="Аннотация"/>
+            <TextBox x:Name="textTB" Width="300" HorizontalAlignment="Left" Margin="5" Height="120" Text="Текст книги..." TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Сохранить" Width="120" Click="SaveBookBtn_Click" Margin="5"/>
+                <Button Content="Очистить" Width="120" Click="ClearBtn_Click" Margin="5"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

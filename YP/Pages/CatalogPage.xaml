@@ -1,0 +1,53 @@
+﻿<Page x:Class="YP.Pages.CatalogPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:YP.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CatalogPage">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Книги книги" FontSize="20" FontWeight="Bold" Foreground="#2c3e50" Margin="5"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBox x:Name="searchTB" Width="200" Margin="15" TextChanged="SearchTB_TextChanged" Text=""/>
+
+            <ComboBox x:Name="genreCB" Width="150" Margin="15" SelectionChanged="GenreCB_SelectionChanged" DisplayMemberPath="name"/>
+
+            <ComboBox x:Name="sortCB" Width="150" Margin="15" SelectionChanged="SortCB_SelectionChanged">
+                <ComboBoxItem Content="По названию"/>
+                <ComboBoxItem Content="По рейтингу"/>
+            </ComboBox>
+        </StackPanel>
+
+        <ListBox x:Name="booksList" Grid.Row="2" Margin="15" SelectionMode="Single" MouseDoubleClick="BooksList_MouseDoubleClick">
+
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Width="170" Margin="15" BorderBrush="#e0e0e0" BorderThickness="1" Padding="10" Background="#fafafa" CornerRadius="5">
+                        <StackPanel>
+                            <Image Source="{Binding cover}" Height="190" Stretch="UniformToFill" Margin="15"/>
+                            <TextBlock Text="{Binding name}" FontWeight="Bold" TextWrapping="Wrap" Margin="15" Height="40"/>
+                            <TextBlock Text="{Binding Users.name}" FontStyle="Italic" Foreground="#555" Margin="15"/>
+                            <TextBlock Text="{Binding Reviews.Count, StringFormat='Отзывов: {0}'}" Foreground="#888" Margin="15"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Page>

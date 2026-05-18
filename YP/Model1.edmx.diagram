@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f7b338e28b5c4ab091b3a176f240d15a" Name="Diagram1">
+        <EntityTypeShape EntityType="YPModel.AuthorRoleRequests" Width="1.5" PointX="5.25" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="YPModel.Book" Width="1.5" PointX="5.25" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="YPModel.BookGenre" Width="1.5" PointX="7.5" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="YPModel.Complaints" Width="1.5" PointX="7.5" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="YPModel.Genres" Width="1.5" PointX="5.25" PointY="16.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="YPModel.ReadingLists" Width="1.5" PointX="10.5" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="YPModel.RequestStatuses" Width="1.5" PointX="3" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="YPModel.Reviews" Width="1.5" PointX="10.5" PointY="14.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="YPModel.Roles" Width="1.5" PointX="0.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="YPModel.StatusBook" Width="1.5" PointX="8.25" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="YPModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="YPModel.Unfreeze" Width="1.5" PointX="10.5" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="YPModel.Users" Width="1.5" PointX="3" PointY="8.75" IsExpanded="true" />
+        <AssociationConnector Association="YPModel.FK_AuthorRoleRequests_RequestStatuses" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_AuthorRoleRequests_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_Book_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_BookGenre_Book" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_Complaints_Book" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_ReadingLists_Book" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_Reviews_Book" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_Unfreeze_Book" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_BookGenre_Genres" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_Complaints_Reviews" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_Complaints_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_ReadingLists_StatusBook" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_ReadingLists_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_Unfreeze_RequestStatuses" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_Reviews_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_Users_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_Unfreeze_Users" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
