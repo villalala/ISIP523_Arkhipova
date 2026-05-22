@@ -31,6 +31,16 @@ namespace YP.Pages
             DataContext = _book;
             LoadReviews();
             LoadCurrentStatus();
+            if (Core.currentUser != null && Core.currentUser.ID_Roles == 3)
+            {
+                FreezeBookBtn.Visibility = Visibility.Visible;
+
+                if (_book.isFrozen)
+                {
+                    FreezeBookBtn.IsEnabled = false;
+                    FreezeBookBtn.Content = "Уже заморожена";
+                }
+            }
         }
 
         private void LoadReviews()
@@ -99,11 +109,6 @@ namespace YP.Pages
             }
         }
 
-        private void ReadBtn_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show(_book.text ?? "Текст книги отсутствует", "Чтение", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
         private void SubmitReviewBtn_Click(object sender, RoutedEventArgs e)
         {
             if (Core.currentUser == null) { MessageBox.Show("Войдите в аккаунт"); 
@@ -136,6 +141,32 @@ namespace YP.Pages
             Core.Context.SaveChanges();
             MessageBox.Show("Жалоба отправлена администратору");
             inputTextTB.Text = "";
+        }
+
+        private void ReadBtn_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new ReaderPage(_book));
+        }
+        private void FreezeBookBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (_book == null) return;
+
+            var confirm = MessageBox.Show(
+                "Вы уверены, что хотите заморозить эту книгу?\nОна станет недоступна для читателей.",
+                "Подтверждение действия",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (confirm == MessageBoxResult.Yes)
+            {
+                _book.isFrozen = true;
+                Core.Context.SaveChanges();
+
+                FreezeBookBtn.IsEnabled = false;
+                FreezeBookBtn.Content = "❄️ Заморожена";
+
+                MessageBox.Show("Книга успешно заморожена.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }

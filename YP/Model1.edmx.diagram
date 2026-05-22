@@ -35,6 +35,7 @@
         <AssociationConnector Association="YPModel.FK_Reviews_Users" ManuallyRouted="false" />
         <AssociationConnector Association="YPModel.FK_Users_Roles" ManuallyRouted="false" />
         <AssociationConnector Association="YPModel.FK_Unfreeze_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="YPModel.FK_AuthorRoleRequests_RequestStatuses1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -60,7 +60,7 @@ namespace YP.Pages
 
             if (sortCB.SelectedIndex == 1)
             {
-                query = query.OrderByDescending(b => b.Reviews.Any() ? b.Reviews.Average(r => r.rating) : 0);
+                query = query.OrderByDescending(b =>b.Reviews.Any() ? b.Reviews.Average(r => r.rating) : 0);
             }
             else
             {

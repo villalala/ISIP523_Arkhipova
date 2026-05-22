@@ -9,28 +9,145 @@
       Title="AdminPage"
       Background="White">
 
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <Grid Margin="15">
+        <TabControl>
 
-        <TextBlock Text="Жалобы и модерация" FontSize="18" FontWeight="Bold" Margin="7"/>
+            <TabItem Header="Жалобы">
+                <StackPanel Margin="10">
+                    <ListBox x:Name="complaintsList" Height="250" SelectionMode="Single">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="#e0e0e0" BorderThickness="1" Padding="8" Margin="3" Background="#fafafa">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding text}" FontWeight="Bold" TextWrapping="Wrap"/>
+                                        <TextBlock Text="{Binding Users.name, StringFormat='От: {0}'}" Foreground="#555"/>
 
-        <DataGrid x:Name="complaintsGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" SelectionChanged="ComplaintsGrid_SelectionChanged">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding ID_Compl}" Width="50"/>
-                <DataGridTextColumn Header="Автор жалобы" Binding="{Binding Users.name}" Width="*"/>
-                <DataGridTextColumn Header="Книга" Binding="{Binding Book.name}" Width="*"/>
-                <DataGridTextColumn Header="Причина" Binding="{Binding text}" Width="2*"/>
-            </DataGrid.Columns>
-        </DataGrid>
+                                        <TextBlock Text="{Binding Book.name, StringFormat='Книга: {0}'}" Foreground="#555">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Book}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <Button Content="Принять (Удалить)" Width="120" Margin="5" Click="ComplaintAccept_Click"/>
+                        <Button Content="Отклонить (Удалить)" Width="120" Margin="5" Click="ComplaintReject_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10">
-            <Button x:Name="btnToggleUser" Content="Заморозить пользователя" Click="ToggleUser_Click" Margin="10" IsEnabled="False"/>
-            <Button x:Name="btnToggleBook" Content="Заморозить книгу" Click="ToggleBook_Click" Margin="10" IsEnabled="False"/>
-            <Button Content="Обновить список" Margin="10" Height="20" Click="RefreshBtn_Click"/>
-        </StackPanel>
+            <TabItem Header="Заявки на разморозку">
+                <StackPanel Margin="10">
+                    <ListBox x:Name="unfreezeList" Height="250" SelectionMode="Single">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="#e0e0e0" BorderThickness="1" Padding="8" Margin="3" Background="#fafafa">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Users.name}" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding text}" TextWrapping="Wrap"/>
+                                        <TextBlock Text="{Binding ID_status, StringFormat='Статус ID: {0}'}" Foreground="#888"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <Button Content="Принять" Width="100" Margin="5" Click="UnfreezeAccept_Click"/>
+                        <Button Content="Отклонить" Width="100" Margin="5" Click="UnfreezeReject_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Заявки на автора">
+                <StackPanel Margin="10">
+                    <ListBox x:Name="authorReqList" Height="250" SelectionMode="Single">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="#e0e0e0" BorderThickness="1" Padding="8" Margin="3" Background="#fafafa">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Users.name}" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding RequestStatuses.name}" Foreground="#888"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <Button Content="Принять" Width="100" Margin="5" Click="AuthorReqAccept_Click"/>
+                        <Button Content="Отклонить" Width="100" Margin="5" Click="AuthorReqReject_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Замороженные объекты">
+                <StackPanel Margin="10">
+                    <TextBlock Text="Пользователи" FontWeight="Bold" Margin="5"/>
+                    <ListBox x:Name="frozenUsersList" Height="90" DisplayMemberPath="name"/>
+
+                    <TextBlock Text="Книги" FontWeight="Bold" Margin="5"/>
+                    <ListBox x:Name="frozenBooksList" Height="90" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding name}" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding description}" TextWrapping="Wrap" FontSize="11" Foreground="#555"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <TextBlock Text="Отзывы" FontWeight="Bold" Margin="5"/>
+                    <ListBox x:Name="frozenReviewsList" Height="90" DisplayMemberPath="text"/>
+
+                    <Button Content="Обновить списки" Width="120" HorizontalAlignment="Left" Margin="0,10,0,0" Click="RefreshFrozen_Click"/>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Пользователи">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox x:Name="usersList" Grid.Column="0" Height="320" SelectionMode="Single" SelectionChanged="UsersList_SelectionChanged">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="5" Margin="2" Background="#f9f9f9">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding name}" FontWeight="Bold" Width="120"/>
+                                        <TextBlock Text="{Binding login}" Foreground="#555"/>
+                                        <TextBlock Text="{Binding Roles.name}" FontStyle="Italic" Foreground="#888" Margin="5"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <StackPanel Grid.Column="1" Margin="5">
+                        <TextBlock Text="Действия с пользователем" FontWeight="Bold" Margin="10"/>
+
+                        <TextBlock Text="Назначить роль:" Margin="5"/>
+                        <ComboBox x:Name="roleCB" Width="150" Margin="5"/>
+                        <Button Content="Сохранить роль" Width="120" Click="SaveRole_Click" Margin="5"/>
+
+                        <TextBlock Text="Новый пароль:" Margin="10"/>
+                        <TextBox x:Name="newPassTB" Width="150" Margin="5"/>
+                        <Button Content="Сменить пароль" Width="120" Click="ChangePassword_Click" Margin="5"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
     </Grid>
 </Page>

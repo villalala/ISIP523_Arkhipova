@@ -15,7 +15,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Книги книги" FontSize="20" FontWeight="Bold" Foreground="#2c3e50" Margin="5"/>
+        <TextBlock Grid.Row="0" Text="Книги Книги" FontSize="20" FontWeight="Bold" Foreground="#2c3e50" Margin="5"/>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <TextBox x:Name="searchTB" Width="200" Margin="15" TextChanged="SearchTB_TextChanged" Text=""/>
@@ -28,7 +28,7 @@
             </ComboBox>
         </StackPanel>
 
-        <ListBox x:Name="booksList" Grid.Row="2" Margin="15" SelectionMode="Single" MouseDoubleClick="BooksList_MouseDoubleClick">
+        <ListBox x:Name="booksList" Grid.Row="2" Margin="15" SelectionMode="Single" MouseDoubleClick="BooksList_MouseDoubleClick" HorizontalContentAlignment="Stretch">
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -43,6 +43,7 @@
                             <Image Source="{Binding cover}" Height="190" Stretch="UniformToFill" Margin="15"/>
                             <TextBlock Text="{Binding name}" FontWeight="Bold" TextWrapping="Wrap" Margin="15" Height="40"/>
                             <TextBlock Text="{Binding Users.name}" FontStyle="Italic" Foreground="#555" Margin="15"/>
+                            <TextBlock Text="{Binding AverageRating, StringFormat='⭐ {0:F1}/10'}" Foreground="#f39c12" FontWeight="Bold" Margin="15"/>
                             <TextBlock Text="{Binding Reviews.Count, StringFormat='Отзывов: {0}'}" Foreground="#888" Margin="15"/>
                         </StackPanel>
                     </Border>

@@ -19,6 +19,7 @@ namespace YP
         {
             this.AuthorRoleRequests = new HashSet<AuthorRoleRequests>();
             this.Unfreeze = new HashSet<Unfreeze>();
+            this.AuthorRoleRequests1 = new HashSet<AuthorRoleRequests>();
         }
     
         public int ID_RequestStatuses { get; set; }
@@ -28,5 +29,7 @@ namespace YP
         public virtual ICollection<AuthorRoleRequests> AuthorRoleRequests { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Unfreeze> Unfreeze { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AuthorRoleRequests> AuthorRoleRequests1 { get; set; }
     }
 }

@@ -20,5 +20,6 @@ namespace YP
     
         public virtual RequestStatuses RequestStatuses { get; set; }
         public virtual Users Users { get; set; }
+        public virtual RequestStatuses RequestStatuses1 { get; set; }
     }
 }

@@ -10,34 +10,67 @@
       Background="White">
 
     <Grid Margin="20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <ListBox x:Name="myBooksList" Grid.Column="0" Margin="10" SelectionChanged="MyBooksList_SelectionChanged">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Text="{Binding name}" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding isFrozen, StringFormat='Статус: {0}'}" FontSize="12" Foreground="#c0392b"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <Grid Grid.Row="0" Margin="5">
+            <TextBlock Text="Кабинет автора" FontSize="22" FontWeight="Bold" VerticalAlignment="Center"/>
+            <Button Content="+ Добавить книгу" Width="150" HorizontalAlignment="Right" Click="AddBookBtn_Click"/>
+        </Grid>
 
-        <StackPanel Grid.Column="1" >
-            <TextBlock Text="Добавить / Редактировать книгу" FontSize="18" FontWeight="Bold" Margin="5"/>
+        <TabControl Grid.Row="1">
 
-            <TextBox x:Name="titleTB" Width="300" HorizontalAlignment="Left" Margin="5" Text="Название книги"/>
-            <TextBox x:Name="coverTB" Width="300" HorizontalAlignment="Left" Margin="5" Text="Ссылка на обложку"/>
-            <TextBox x:Name="descTB" Width="300" HorizontalAlignment="Left" Margin="5" Text="Аннотация"/>
-            <TextBox x:Name="textTB" Width="300" HorizontalAlignment="Left" Margin="5" Height="120" Text="Текст книги..." TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+            <TabItem Header="Мои книги">
+                <ListBox x:Name="myBooksList" Margin="10" SelectionMode="Single">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="#e0e0e0" BorderThickness="1" Padding="10" Margin="3" Background="#fafafa">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
 
-            <StackPanel Orientation="Horizontal">
-                <Button Content="Сохранить" Width="120" Click="SaveBookBtn_Click" Margin="5"/>
-                <Button Content="Очистить" Width="120" Click="ClearBtn_Click" Margin="5"/>
-            </StackPanel>
-        </StackPanel>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="{Binding name}" FontWeight="Bold" FontSize="16"/>
+                                        <TextBlock Text="{Binding description}" TextWrapping="Wrap" MaxHeight="40" Foreground="#555"/>
+                                    </StackPanel>
+
+                                    <Button Grid.Column="1" Content="✎ Редактировать" Width="100" VerticalAlignment="Center" 
+                                            Click="EditBookBtn_Click" Margin="5"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+
+            <TabItem Header="Замороженные">
+                <ListBox x:Name="frozenBooksList" Margin="10" SelectionMode="Single">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="#ffcdd2" BorderThickness="1" Padding="10" Margin="3" Background="#ffebee">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="{Binding name}" FontWeight="Bold" Foreground="#c62828"/>
+                                        <TextBlock Text="Статус: Заморожена" Foreground="#c62828" FontStyle="Italic"/>
+                                    </StackPanel>
+
+                                    <Button Grid.Column="1" Content="Оспорить" Width="100" VerticalAlignment="Center" Click="AppealBookBtn_Click" Margin="5"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+
+        </TabControl>
     </Grid>
 </Page>

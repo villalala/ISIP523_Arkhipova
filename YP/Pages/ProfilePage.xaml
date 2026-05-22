@@ -5,18 +5,47 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:YP.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="600" d:DesignWidth="800"
       Title="ProfilePage"
       Background="White">
 
-    <Grid Margin="30" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <StackPanel Width="300">
+    <Grid Margin="30" HorizontalAlignment="Center" VerticalAlignment="Top">
+        <StackPanel Width="350">
+
             <TextBlock Text="Мой профиль" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="7"/>
+
+            <Border x:Name="freezeWarning" Background="#ffebee" BorderBrush="#f44336" BorderThickness="1" Padding="7" Margin="5" Visibility="Collapsed" CornerRadius="3">
+                <StackPanel>
+                    <TextBlock Text="Аккаунт заморожен" FontWeight="Bold" Foreground="#c62828"/>
+                    <TextBlock x:Name="freezeReason" Text="" Foreground="#c62828" Margin="3" TextWrapping="Wrap"/>
+                    <Button Content="Оспорить" Width="100" HorizontalAlignment="Left" Margin="5" Click="AppealFreezeBtn_Click"/>
+                </StackPanel>
+            </Border>
 
             <TextBlock Text="{Binding login, StringFormat='Логин: {0}'}" Margin="5"/>
             <TextBlock Text="{Binding name, StringFormat='Имя: {0}'}" Margin="5"/>
             <TextBlock Text="{Binding email, StringFormat='Email: {0}'}" Margin="5"/>
             <TextBlock Text="{Binding Roles.name, StringFormat='Роль: {0}'}" Margin="5" FontWeight="Bold"/>
+
+            <Button x:Name="btnApplyAuthor" Content="Подать заявку на роль Автора" Width="200" HorizontalAlignment="Left" Margin="10" Click="ApplyAuthorBtn_Click"/>
+
+            <Rectangle Height="1" Fill="#ccc" Margin="10"/>
+
+            <TextBlock Text="Мои отзывы" FontSize="16" FontWeight="Bold" Margin="5"/>
+            <ListBox x:Name="reviewsList" Height="250" Margin="5">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="#e0e0e0" BorderThickness="1" Padding="5" Margin="3" Background="#fafafa">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Book.name}" FontWeight="Bold" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding text}" TextWrapping="Wrap" Margin="3"/>
+                                <TextBlock Text="{Binding rating, StringFormat='Оценка: {0}/10'}" Foreground="#f39c12" Margin="3"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
         </StackPanel>
     </Grid>
 </Page>

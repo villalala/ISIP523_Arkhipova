@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:YP"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="BookBook" Height="450" Width="800">
+    
     <Grid>
-        <Frame x:Name="MainFrame" Source="Pages/MainPage.xaml"/>
+        <Frame x:Name="MainFrame" Source="Pages/MainPage.xaml" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

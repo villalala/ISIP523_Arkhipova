@@ -43,6 +43,7 @@
             <StackPanel >
                 <Button Content="Сохранить статус" Width="140" Click="SaveStatusBtn_Click" HorizontalAlignment="Left" Margin="5"/>
                 <Button Content="Читать текст" Width="140" Margin="5" HorizontalAlignment="Left" Click="ReadBtn_Click"/>
+                <Button x:Name="FreezeBookBtn" Content="Заморозить книгу" Width="140" Height="35" Background="#e74c3c" Foreground="White" FontWeight="Bold" Click="FreezeBookBtn_Click" Margin="5" Visibility="Collapsed"/>
             </StackPanel>
         </StackPanel>
 
@@ -53,7 +54,7 @@
                         <StackPanel>
                             <TextBlock Text="{Binding Users.name}" FontWeight="Bold"/>
                             <TextBlock Text="{Binding text}" TextWrapping="Wrap"/>
-                            <TextBlock Text="{Binding rating, StringFormat='Оценка: {0}/5'}" Foreground="#f39c12"/>
+                            <TextBlock Text="{Binding rating, StringFormat='Оценка: {0}/10'}" Foreground="#f39c12"/>
                         </StackPanel>
                     </Border>
                 </DataTemplate>
@@ -62,12 +63,17 @@
 
         <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Orientation="Horizontal" Margin="3">
             <TextBox x:Name="inputTextTB" Width="300" Margin="3" Text="Текст отзыва или жалобы..."/>
-            <ComboBox x:Name="ratingCB" Width="60" Margin="3" SelectedIndex="4">
+            <ComboBox x:Name="ratingCB" Width="60" Margin="2" SelectedIndex="9">
                 <ComboBoxItem Content="1"/>
                 <ComboBoxItem Content="2"/>
                 <ComboBoxItem Content="3"/>
                 <ComboBoxItem Content="4"/>
                 <ComboBoxItem Content="5"/>
+                <ComboBoxItem Content="6"/>
+                <ComboBoxItem Content="7"/>
+                <ComboBoxItem Content="8"/>
+                <ComboBoxItem Content="9"/>
+                <ComboBoxItem Content="10"/>
             </ComboBox>
             <Button Content="Оставить отзыв" Margin="3" Click="SubmitReviewBtn_Click"/>
             <Button Content="Жалоба" Margin="3" Click="ComplaintBtn_Click"/>

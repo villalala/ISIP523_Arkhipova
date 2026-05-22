@@ -31,12 +31,18 @@ namespace YP.Pages
 
         private void UpdateAuthState()
         {
-            AuthBtn.Visibility = Core.currentUser == null ? Visibility.Visible : Visibility.Collapsed;
+            if (Core.currentUser == null)
+            {
+                AuthBtn.Visibility = Visibility.Visible;
+                adminBtn.Visibility = Visibility.Collapsed;
+                authorBtn.Visibility = Visibility.Collapsed;
+                return;
+            }
 
-            if (Core.currentUser.ID_Roles == 3) adminBtn.Visibility = Visibility.Visible;
-            if (Core.currentUser.ID_Roles == 2) authorBtn.Visibility = Visibility.Visible;
+            AuthBtn.Visibility = Visibility.Collapsed;
+            adminBtn.Visibility = Core.currentUser.ID_Roles == 3 ? Visibility.Visible : Visibility.Collapsed;
+            authorBtn.Visibility = Core.currentUser.ID_Roles == 2 ? Visibility.Visible : Visibility.Collapsed;
         }
-
         private void AuthBtn_Click(object sender, RoutedEventArgs e)
         {
             ContentFrame.Navigate(new LoginPage());

@@ -17,8 +17,6 @@ namespace YP.Pages
 {
     public partial class AuthorPage : Page
     {
-        private Book _selectedBook;
-
         public AuthorPage()
         {
             InitializeComponent();
@@ -27,84 +25,58 @@ namespace YP.Pages
 
         private void AuthorPage_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Core.currentUser == null || Core.currentUser.ID_Roles != 2)
-            {
-                MessageBox.Show("Доступ только для авторов", "Ошибка доступа", MessageBoxButton.OK, MessageBoxImage.Warning);
-                NavigationService.GoBack();
-                return;
-            }
-
-            LoadMyBooks();
+            LoadBooks();
         }
 
-        private void LoadMyBooks()
+        private void LoadBooks()
         {
-            var authorBooks = Core.Context.Book.Where(b => b.ID_Author == Core.currentUser.ID_Users).ToList();
+            if (Core.currentUser == null) return;
 
-            myBooksList.ItemsSource = authorBooks;
+            int authorId = Core.currentUser.ID_Users;
+
+            myBooksList.ItemsSource = Core.Context.Book.Where(b => b.ID_Author == authorId && b.isFrozen == false).ToList();
+
+            frozenBooksList.ItemsSource = Core.Context.Book.Where(b => b.ID_Author == authorId && b.isFrozen == true).ToList();
         }
 
-        private void MyBooksList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void AddBookBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (myBooksList.SelectedItem is Book book)
+            NavigationService.Navigate(new AddBookPage(null));
+        }
+
+        private void EditBookBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button).DataContext is Book book)
             {
-                _selectedBook = book;
-                titleTB.Text = book.name;
-                coverTB.Text = book.cover;
-                descTB.Text = book.description;
-                textTB.Text = book.text;
+                NavigationService.Navigate(new AddBookPage(book));
             }
         }
 
-        private void SaveBookBtn_Click(object sender, RoutedEventArgs e)
+        private void AppealBookBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(titleTB.Text))
+            if ((sender as Button).DataContext is Book frozenBook)
             {
-                MessageBox.Show("Введите название книги", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+                var existing = Core.Context.Unfreeze.FirstOrDefault(u => u.ID_Book == frozenBook.ID_Book && u.ID_status == 1);
 
-            if (_selectedBook == null)
-            {
-                var newBook = new Book
+                if (existing != null)
                 {
-                    name = titleTB.Text,
-                    cover = coverTB.Text,
-                    description = descTB.Text,
-                    text = textTB.Text,
-                    ID_Author = Core.currentUser.ID_Users,
-                    isFrozen = false
+                    MessageBox.Show("Заявка на разморозку этой книги уже на рассмотрении.", "Инфо", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                var appeal = new Unfreeze
+                {
+                    ID_Users = Core.currentUser.ID_Users,
+                    ID_Book = frozenBook.ID_Book,
+                    text = "Прошу снять заморозку с книги. Нарушений не обнаружено.",
+                    ID_status = 1
                 };
-                Core.Context.Book.Add(newBook);
-                MessageBox.Show("Книга добавлена", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                Core.Context.Unfreeze.Add(appeal);
+                Core.Context.SaveChanges();
+
+                MessageBox.Show("Заявка отправлена администратору.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            else
-            {
-                _selectedBook.name = titleTB.Text;
-                _selectedBook.cover = coverTB.Text;
-                _selectedBook.description = descTB.Text;
-                _selectedBook.text = textTB.Text;
-                MessageBox.Show("Книга обновлена", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-
-            Core.Context.SaveChanges();
-            ClearForm();
-            LoadMyBooks();
-        }
-
-        private void ClearBtn_Click(object sender, RoutedEventArgs e)
-        {
-            ClearForm();
-        }
-
-        private void ClearForm()
-        {
-            _selectedBook = null;
-            titleTB.Text = "Название книги";
-            coverTB.Text = "Ссылка на обложку";
-            descTB.Text = "Аннотация";
-            textTB.Text = "Текст книги...";
-            myBooksList.SelectedItem = null;
         }
     }
 }
