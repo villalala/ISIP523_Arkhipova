@@ -17,9 +17,9 @@ namespace YP.Pages
 {
     public partial class RegisterPage : Page
     {
-        public RegisterPage() => InitializeComponent();
+        public RegisterPage() => InitializeComponent(); 
 
-        private void RegBtn_Click(object sender, RoutedEventArgs e)
+        private void RegBtn_Click(object sender, RoutedEventArgs e) // зарегестрироваться 
         {
             if (string.IsNullOrWhiteSpace(RegLoginBox.Text) || string.IsNullOrWhiteSpace(RegPassBox.Password))
             {
@@ -33,20 +33,20 @@ namespace YP.Pages
                 return;
             }
 
-            var readerRole = Core.Context.Roles.FirstOrDefault(r => r.name == "Читатель");
+            var readerRole = Core.Context.Roles.FirstOrDefault(r => r.name == "Читатель"); // получение роли читателя 
             if (readerRole == null) return;
 
-            var newUser = new Users
+            var newUser = new Users // создание нового пользователя 
             {
                 login = RegLoginBox.Text,
                 password = RegPassBox.Password,
                 name = RegNameBox.Text,
                 email = RegEmailBox.Text,
-                ID_Roles = readerRole.ID_Roles,
+                ID_Roles = readerRole.ID_Roles, // роль читателя присваивается 
                 isFrozen = false
             };
 
-            Core.Context.Users.Add(newUser);
+            Core.Context.Users.Add(newUser); // добавление нового пользователя в контекст бд
             Core.Context.SaveChanges();
 
             MessageBox.Show("Регистрация успешна!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -54,6 +54,6 @@ namespace YP.Pages
             NavigationService.GoBack();
         }
 
-        private void BackBtn_Click(object sender, RoutedEventArgs e) => NavigationService.GoBack();
+        private void BackBtn_Click(object sender, RoutedEventArgs e) => NavigationService.GoBack(); 
     }
 }

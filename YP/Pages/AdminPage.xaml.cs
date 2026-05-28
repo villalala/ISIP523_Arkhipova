@@ -20,12 +20,12 @@ namespace YP.Pages
         public AdminPage()
         {
             InitializeComponent();
-            Loaded += AdminPage_Loaded;
+            Loaded += AdminPage_Loaded; // ждет, пока страница полностью прогрузится и только тогда запускает
         }
 
         private void AdminPage_Loaded(object sender, RoutedEventArgs e) => LoadAllData();
 
-        private void LoadAllData()
+        private void LoadAllData() // собирает все данные для страницы адмиина
         {
             LoadComplaints();
             LoadUnfreezeRequests();
@@ -34,10 +34,10 @@ namespace YP.Pages
             LoadUsers();
             LoadRolesForComboBox();
         }
+        
+        private void LoadComplaints() => complaintsList.ItemsSource = Core.Context.Complaints.ToList(); // загружает все жалобы и грузит 
 
-        private void LoadComplaints() => complaintsList.ItemsSource = Core.Context.Complaints.ToList();
-
-        private void ComplaintAccept_Click(object sender, RoutedEventArgs e)
+        private void ComplaintAccept_Click(object sender, RoutedEventArgs e) // принятие жалобы 
         {
             if (complaintsList.SelectedItem is Complaints complaint)
             {
@@ -48,7 +48,7 @@ namespace YP.Pages
             }
         }
 
-        private void ComplaintReject_Click(object sender, RoutedEventArgs e)
+        private void ComplaintReject_Click(object sender, RoutedEventArgs e) // отклонение 
         {
             if (complaintsList.SelectedItem is Complaints complaint)
             {
@@ -61,14 +61,14 @@ namespace YP.Pages
 
         private void LoadUnfreezeRequests()
         {
-            unfreezeList.ItemsSource = Core.Context.Unfreeze.Where(u => u.ID_status == 1).ToList();
+            unfreezeList.ItemsSource = Core.Context.Unfreeze.Where(u => u.ID_status == 1).ToList(); // фильтр, чтобы были только жалобы на расмотрение 
         }
 
-        private void UnfreezeAccept_Click(object sender, RoutedEventArgs e)
+        private void UnfreezeAccept_Click(object sender, RoutedEventArgs e) // принять заявку на рассмотерние 
         {
             if (unfreezeList.SelectedItem is Unfreeze request)
             {
-                request.ID_status = 2;
+                request.ID_status = 2; // меняет на одобрено 
                 if (request.Users != null)
                 {
                     request.Users.isFrozen = false;
@@ -82,11 +82,11 @@ namespace YP.Pages
                 }
 
                 Core.Context.SaveChanges();
-                LoadAllData();
+                LoadAllData(); // обновляет все вкладки 
             }
         }
 
-        private void UnfreezeReject_Click(object sender, RoutedEventArgs e)
+        private void UnfreezeReject_Click(object sender, RoutedEventArgs e) // отклонить заявку 
         {
             if (unfreezeList.SelectedItem is Unfreeze request)
             {
@@ -97,12 +97,12 @@ namespace YP.Pages
             }
         }
 
-        private void LoadAuthorRequests()
+        private void LoadAuthorRequests() // заявки на роль автора со статусом на рассмотрении
         {
-            authorReqList.ItemsSource = Core.Context.AuthorRoleRequests.Where(r => r.ID_RequestStatuses == 1).ToList();
+            authorReqList.ItemsSource = Core.Context.AuthorRoleRequests.Where(r => r.ID_RequestStatuses == 1).ToList(); 
         }
 
-        private void AuthorReqAccept_Click(object sender, RoutedEventArgs e)
+        private void AuthorReqAccept_Click(object sender, RoutedEventArgs e) // одобрить заявку на автора 
         {
             if (authorReqList.SelectedItem is AuthorRoleRequests request)
             {
@@ -114,7 +114,7 @@ namespace YP.Pages
             }
         }
 
-        private void AuthorReqReject_Click(object sender, RoutedEventArgs e)
+        private void AuthorReqReject_Click(object sender, RoutedEventArgs e) // отклонить заявку на автора 
         {
             if (authorReqList.SelectedItem is AuthorRoleRequests request)
             {
@@ -125,49 +125,49 @@ namespace YP.Pages
             }
         }
 
-        private void LoadFrozenItems()
+        private void LoadFrozenItems() // списки замороженных
         {
             frozenUsersList.ItemsSource = Core.Context.Users.Where(u => u.isFrozen == true).ToList();
             frozenBooksList.ItemsSource = Core.Context.Book.Where(b => b.isFrozen == true).ToList();
         }
-        private void RefreshFrozen_Click(object sender, RoutedEventArgs e) => LoadFrozenItems();
+        private void RefreshFrozen_Click(object sender, RoutedEventArgs e) => LoadFrozenItems(); // обновить списки - просто перезагрузка
 
-        private void LoadUsers() => usersList.ItemsSource = Core.Context.Users.ToList();
+        private void LoadUsers() => usersList.ItemsSource = Core.Context.Users.ToList(); // все пользователи загружаются 
 
-        private void LoadRolesForComboBox()
+        private void LoadRolesForComboBox() // загрузка ролей 
         {
-            roleCB.ItemsSource = Core.Context.Roles.ToList();
+            roleCB.ItemsSource = Core.Context.Roles.ToList(); // загрузка из бд
             roleCB.DisplayMemberPath = "name";
             roleCB.SelectedValuePath = "ID_Roles";
         }
 
-        private void UsersList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void UsersList_SelectionChanged(object sender, SelectionChangedEventArgs e) // роль пользователя подставляется в комбо бокс
         {
             if (usersList.SelectedItem is Users user)
             {
-                roleCB.SelectedValue = user.ID_Roles;
+                roleCB.SelectedValue = user.ID_Roles; // подставляет в комбо роль пользователя 
             }
         }
 
-        private void SaveRole_Click(object sender, RoutedEventArgs e)
+        private void SaveRole_Click(object sender, RoutedEventArgs e) // сохранить роль
         {
             if (usersList.SelectedItem is Users user && roleCB.SelectedValue is int roleId)
             {
-                user.ID_Roles = roleId;
+                user.ID_Roles = roleId; // меняет роль
                 Core.Context.SaveChanges();
                 MessageBox.Show("Роль успешно изменена.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 LoadUsers();
             }
         }
 
-        private void ChangePassword_Click(object sender, RoutedEventArgs e)
+        private void ChangePassword_Click(object sender, RoutedEventArgs e) /// сменить пароль
         {
             if (usersList.SelectedItem is Users user && !string.IsNullOrWhiteSpace(newPassTB.Text))
             {
-                user.password = newPassTB.Text;
+                user.password = newPassTB.Text; // присваивается новый пароль
                 Core.Context.SaveChanges();
                 MessageBox.Show("Пароль изменён.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                newPassTB.Text = "";
+                newPassTB.Text = ""; // очищает поле 
             }
         }
     }

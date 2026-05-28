@@ -23,80 +23,65 @@ namespace YP.Pages
             Loaded += ProfilePage_Loaded;
         }
 
-        private void ProfilePage_Loaded(object sender, RoutedEventArgs e)
+        private void ProfilePage_Loaded(object sender, RoutedEventArgs e) // отображение профиля 
         {
             if (Core.currentUser == null)
             {
-                MessageBox.Show("Войдите в систему", "Внимание",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Войдите в систему", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
                 NavigationService?.GoBack();
                 return;
             }
 
-            // Привязываем данные пользователя (как у тебя)
-            DataContext = Core.currentUser;
+            DataContext = Core.currentUser; // привязка пользователя к текущему контексту 
 
-            // Показываем предупреждение, если аккаунт заморожен
-            if (Core.currentUser.isFrozen)
+            if (Core.currentUser.isFrozen) // если заморожен 
             {
                 freezeWarning.Visibility = Visibility.Visible;
             }
 
-            // Скрываем кнопку заявки, если уже автор/админ
-            if (Core.currentUser.ID_Roles == 2 || Core.currentUser.ID_Roles == 3)
-                btnApplyAuthor.Visibility = Visibility.Collapsed;
+            if (Core.currentUser.ID_Roles == 2 || Core.currentUser.ID_Roles == 3) btnApplyAuthor.Visibility = Visibility.Collapsed; // скрыть заявку на автора, если он уже автор или админ
 
             // Загружаем отзывы
             LoadReviews();
         }
 
-        private void LoadReviews()
+        private void LoadReviews() // отзывы пользователя 
         {
-            var userReviews = Core.Context.Reviews
-                .Where(r => r.ID_Users == Core.currentUser.ID_Users)
-                .ToList();
-            reviewsList.ItemsSource = userReviews;
-        }
+            var userReviews = Core.Context.Reviews.Where(r => r.ID_Users == Core.currentUser.ID_Users).ToList(); // отзывы пользователя 
+            reviewsList.ItemsSource = userReviews; // привязка отзывов к листу 
+        } 
 
-        private void ApplyAuthorBtn_Click(object sender, RoutedEventArgs e)
+        private void ApplyAuthorBtn_Click(object sender, RoutedEventArgs e) // стать автором 
         {
             if (Core.currentUser == null) return;
 
-            // Проверяем: не подана ли уже заявка со статусом "На рассмотрении" (ID=1)
-            var existing = Core.Context.AuthorRoleRequests
-                .FirstOrDefault(r => r.ID_Users == Core.currentUser.ID_Users
-                                  && r.ID_RequestStatuses == 1);
+            var existing = Core.Context.AuthorRoleRequests.FirstOrDefault(r => r.ID_Users == Core.currentUser.ID_Users && r.ID_RequestStatuses == 1); // проверка нет ли уже заявки 
 
             if (existing != null)
             {
-                MessageBox.Show("У вас уже есть заявка на рассмотрении.", "Инфо",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("У вас уже есть заявка на рассмотрении.", "Инфо", MessageBoxButton.OK, MessageBoxImage.Information); 
                 return;
             }
 
-            // Создаём новую заявку
-            var newRequest = new AuthorRoleRequests
+            var newRequest = new AuthorRoleRequests // создание заявки 
             {
-                ID_Users = Core.currentUser.ID_Users,
+                ID_Users = Core.currentUser.ID_Users, // привязка заявки на юзера 
                 ID_RequestStatuses = 1 // 1 = "На рассмотрении"
             };
 
-            Core.Context.AuthorRoleRequests.Add(newRequest);
+            Core.Context.AuthorRoleRequests.Add(newRequest); // добавление заявки в таблицу 
             Core.Context.SaveChanges();
 
             MessageBox.Show("Заявка отправлена! Ожидайте решения администратора.", "Успех",
                 MessageBoxButton.OK, MessageBoxImage.Information);
 
-            // Блокируем кнопку, чтобы не спамить
-            btnApplyAuthor.IsEnabled = false;
+            btnApplyAuthor.IsEnabled = false; // блокировка книги 
             btnApplyAuthor.Content = "Заявка отправлена";
         }
 
-        private void AppealFreezeBtn_Click(object sender, RoutedEventArgs e)
+        private void AppealFreezeBtn_Click(object sender, RoutedEventArgs e) // ну типо аппеляции 
         {
-            // Заглушка, если нет таблицы апелляций
-            MessageBox.Show("Апелляция отправлена администратору.", "Инфо",
-                MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Апелляция отправлена администратору.", "Инфо", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

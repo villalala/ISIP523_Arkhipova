@@ -9,11 +9,11 @@ namespace YP
     internal class Core
     {
         public static YPEntities Context = new YPEntities();
-        public static Users currentUser { get; set; }
+        public static Users currentUser { get; set; } // текущий пользователь 
     }
     public partial class Book
     {
-        public double AverageRating
+        public double AverageRating // средний рейтинг вычисление 
         {
             get
             {

@@ -25,13 +25,13 @@ namespace YP.Pages
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            UpdateAuthState();
+            UpdateAuthState(); // обновление кнопок если надо 
             ContentFrame.Navigate(new CatalogPage());
         }
 
-        private void UpdateAuthState()
+        private void UpdateAuthState() // показ интерфейса в зависимости от роли
         {
-            if (Core.currentUser == null)
+            if (Core.currentUser == null) // это если не зашел 
             {
                 AuthBtn.Visibility = Visibility.Visible;
                 adminBtn.Visibility = Visibility.Collapsed;
@@ -39,25 +39,25 @@ namespace YP.Pages
                 return;
             }
 
-            AuthBtn.Visibility = Visibility.Collapsed;
-            adminBtn.Visibility = Core.currentUser.ID_Roles == 3 ? Visibility.Visible : Visibility.Collapsed;
-            authorBtn.Visibility = Core.currentUser.ID_Roles == 2 ? Visibility.Visible : Visibility.Collapsed;
+            AuthBtn.Visibility = Visibility.Collapsed; // скрытие кнопки войти 
+            adminBtn.Visibility = Core.currentUser.ID_Roles == 3 ? Visibility.Visible : Visibility.Collapsed; // админ панель если зашел админ 
+            authorBtn.Visibility = Core.currentUser.ID_Roles == 2 ? Visibility.Visible : Visibility.Collapsed; // панель для авторов
         }
         private void AuthBtn_Click(object sender, RoutedEventArgs e)
         {
             ContentFrame.Navigate(new LoginPage());
         }
 
-        private void CatalogBtn_Click(object sender, RoutedEventArgs e) => ContentFrame.Navigate(new CatalogPage());
-        private void ListsBtn_Click(object sender, RoutedEventArgs e) => ContentFrame.Navigate(new ListsPage());
-        private void AdminBtn_Click(object sender, RoutedEventArgs e) => ContentFrame.Navigate(new AdminPage());
-        private void AuthorBtn_Click(object sender, RoutedEventArgs e) => ContentFrame.Navigate(new AuthorPage());
-        private void ProfileBtn_Click(object sender, RoutedEventArgs e) => ContentFrame.Navigate(new ProfilePage());
+        private void CatalogBtn_Click(object sender, RoutedEventArgs e) => ContentFrame.Navigate(new CatalogPage()); // перехд в каталог 
+        private void ListsBtn_Click(object sender, RoutedEventArgs e) => ContentFrame.Navigate(new ListsPage()); // переход в списик 
+        private void AdminBtn_Click(object sender, RoutedEventArgs e) => ContentFrame.Navigate(new AdminPage()); // в админку 
+        private void AuthorBtn_Click(object sender, RoutedEventArgs e) => ContentFrame.Navigate(new AuthorPage()); //  вавторское 
+        private void ProfileBtn_Click(object sender, RoutedEventArgs e) => ContentFrame.Navigate(new ProfilePage()); // профиль 
 
-        private void LogoutBtn_Click(object sender, RoutedEventArgs e)
+        private void LogoutBtn_Click(object sender, RoutedEventArgs e) // выход из аккаунта 
         {
             Core.currentUser = null;
-            UpdateAuthState();
+            UpdateAuthState(); // обновление кнопок 
             ContentFrame.Navigate(new CatalogPage());
         }
     }

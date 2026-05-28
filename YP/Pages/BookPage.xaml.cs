@@ -17,25 +17,25 @@ namespace YP.Pages
 {
     public partial class BookPage : Page
     {
-        private Book _book;
+        private Book _book; // поле для хранения выбранной книги 
 
-        public BookPage(Book book)
+        public BookPage(Book book) // конструктор 
         {
             InitializeComponent();
-            _book = book;
+            _book = book; // сохранение выбранной книги в поле классе 
             Loaded += BookPage_Loaded;
         }
 
         private void BookPage_Loaded(object sender, RoutedEventArgs e)
         {
             DataContext = _book;
-            LoadReviews();
-            LoadCurrentStatus();
-            if (Core.currentUser != null && Core.currentUser.ID_Roles == 3)
+            LoadReviews(); // грузит отзывы
+            LoadCurrentStatus(); // проверка статуса книги в листе юзера
+            if (Core.currentUser != null && Core.currentUser.ID_Roles == 3) // если админ - кнопка заморозки
             {
-                FreezeBookBtn.Visibility = Visibility.Visible;
+                FreezeBookBtn.Visibility = Visibility.Visible; // видимость
 
-                if (_book.isFrozen)
+                if (_book.isFrozen) // если книга уже заморожена - блокировка 
                 {
                     FreezeBookBtn.IsEnabled = false;
                     FreezeBookBtn.Content = "Уже заморожена";
@@ -43,16 +43,16 @@ namespace YP.Pages
             }
         }
 
-        private void LoadReviews()
+        private void LoadReviews() // грузит отзывы
         {
-            reviewsList.ItemsSource = Core.Context.Reviews.Where(r => r.ID_Book == _book.ID_Book).ToList();
+            reviewsList.ItemsSource = Core.Context.Reviews.Where(r => r.ID_Book == _book.ID_Book).ToList(); // точно ли та книга 
         }
 
-        private void LoadCurrentStatus()
+        private void LoadCurrentStatus() // проверка добавления статуса 
         {
             if (Core.currentUser == null) return;
 
-            var existing = Core.Context.ReadingLists.FirstOrDefault(rl => rl.ID_Users == Core.currentUser.ID_Users && rl.ID_Book == _book.ID_Book);
+            var existing = Core.Context.ReadingLists.FirstOrDefault(rl => rl.ID_Users == Core.currentUser.ID_Users && rl.ID_Book == _book.ID_Book); // ищет запись в таблице юзера + книга 
 
             if (existing != null)
             {
@@ -64,7 +64,7 @@ namespace YP.Pages
             }
         }
 
-        private void SaveStatusBtn_Click(object sender, RoutedEventArgs e)
+        private void SaveStatusBtn_Click(object sender, RoutedEventArgs e) // сохранение статуса 
         {
             if (Core.currentUser == null)
             {
@@ -72,7 +72,7 @@ namespace YP.Pages
                 return;
             }
 
-            string selectedStatus = "";
+            string selectedStatus = ""; // определение какой статус выбран 
             if (rbPlan.IsChecked == true) selectedStatus = "В планах";
             else if (rbRead.IsChecked == true) selectedStatus = "Читаю";
             else if (rbDone.IsChecked == true) selectedStatus = "Прочитано";
@@ -80,19 +80,19 @@ namespace YP.Pages
 
             if (string.IsNullOrEmpty(selectedStatus)) return;
 
-            UpdateReadingList(selectedStatus);
+            UpdateReadingList(selectedStatus); // обновление бд  
         }
 
-        private void UpdateReadingList(string statusName)
+        private void UpdateReadingList(string statusName) // обновление бд 
         {
-            var status = Core.Context.StatusBook.FirstOrDefault(s => s.name == statusName);
+            var status = Core.Context.StatusBook.FirstOrDefault(s => s.name == statusName); // название статуса ищет 
             if (status == null) return;
 
-            var existing = Core.Context.ReadingLists.FirstOrDefault(rl => rl.ID_Users == Core.currentUser.ID_Users && rl.ID_Book == _book.ID_Book);
+            var existing = Core.Context.ReadingLists.FirstOrDefault(rl => rl.ID_Users == Core.currentUser.ID_Users && rl.ID_Book == _book.ID_Book); // проверка есть ли уже такая же запись 
 
             if (existing == null)
             {
-                Core.Context.ReadingLists.Add(new ReadingLists
+                Core.Context.ReadingLists.Add(new ReadingLists // добавляет книгу в список чтения 
                 {
                     ID_Users = Core.currentUser.ID_Users,
                     ID_Book = _book.ID_Book,
@@ -103,13 +103,13 @@ namespace YP.Pages
             }
             else
             {
-                existing.ID_StatB = status.ID_StatB;
+                existing.ID_StatB = status.ID_StatB; // меняет ид статуса 
                 Core.Context.SaveChanges();
                 MessageBox.Show($"Статус изменён на «{statusName}»", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
-        private void SubmitReviewBtn_Click(object sender, RoutedEventArgs e)
+        private void SubmitReviewBtn_Click(object sender, RoutedEventArgs e) // оставить отзыв 
         {
             if (Core.currentUser == null) { MessageBox.Show("Войдите в аккаунт"); 
                 return; }
@@ -124,30 +124,30 @@ namespace YP.Pages
             string text = inputTextTB.Text;
             if (string.IsNullOrWhiteSpace(text)) { MessageBox.Show("Введите текст отзыва"); return; }
 
-            Core.Context.Reviews.Add(new Reviews { ID_Users = Core.currentUser.ID_Users, ID_Book = _book.ID_Book, text = text, rating = rating });
+            Core.Context.Reviews.Add(new Reviews { ID_Users = Core.currentUser.ID_Users, ID_Book = _book.ID_Book, text = text, rating = rating }); // создание отзыва 
             Core.Context.SaveChanges();
             MessageBox.Show("Отзыв успешно добавлен");
             inputTextTB.Text = "";
             LoadReviews();
         }
 
-        private void ComplaintBtn_Click(object sender, RoutedEventArgs e)
+        private void ComplaintBtn_Click(object sender, RoutedEventArgs e) // жалоба 
         {
             if (Core.currentUser == null) { MessageBox.Show("Войдите в аккаунт"); return; }
             string text = inputTextTB.Text;
             if (string.IsNullOrWhiteSpace(text)) { MessageBox.Show("Опишите причину жалобы"); return; }
 
-            Core.Context.Complaints.Add(new Complaints { ID_Users = Core.currentUser.ID_Users, ID_Book = _book.ID_Book, ID_Reviews = null, text = text });
+            Core.Context.Complaints.Add(new Complaints { ID_Users = Core.currentUser.ID_Users, ID_Book = _book.ID_Book, ID_Reviews = null, text = text }); // добавление жалобы 
             Core.Context.SaveChanges();
             MessageBox.Show("Жалоба отправлена администратору");
             inputTextTB.Text = "";
         }
 
-        private void ReadBtn_Click(object sender, RoutedEventArgs e)
+        private void ReadBtn_Click(object sender, RoutedEventArgs e) // чтение книги 
         {
             NavigationService.Navigate(new ReaderPage(_book));
         }
-        private void FreezeBookBtn_Click(object sender, RoutedEventArgs e)
+        private void FreezeBookBtn_Click(object sender, RoutedEventArgs e) // заморозить книгу 
         {
             if (_book == null) return;
 
@@ -159,11 +159,11 @@ namespace YP.Pages
 
             if (confirm == MessageBoxResult.Yes)
             {
-                _book.isFrozen = true;
+                _book.isFrozen = true; 
                 Core.Context.SaveChanges();
 
-                FreezeBookBtn.IsEnabled = false;
-                FreezeBookBtn.Content = "❄️ Заморожена";
+                FreezeBookBtn.IsEnabled = false; // обновление интерфейса, блокировка кнопки
+                FreezeBookBtn.Content = "Заморожена";
 
                 MessageBox.Show("Книга успешно заморожена.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
             }

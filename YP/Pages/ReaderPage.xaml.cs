@@ -28,22 +28,22 @@ namespace YP.Pages
 
         private void ReaderPage_Loaded(object sender, RoutedEventArgs e)
         {
-            BookTitle.Text = currentBook.name;
+            BookTitle.Text = currentBook.name; // название
             LoadBookText();
         }
 
-        private void LoadBookText()
+        private void LoadBookText()  // загрузка книги и текста 
         {
-            TextContent.Document.Blocks.Clear();
+            TextContent.Document.Blocks.Clear(); // осищение предыдущего текста 
 
+            // весь текст на абзацы, разделение как двойной ентер 
             string[] paragraphs = currentBook.text.Split(new[] { "\r\n\r\n", "\n\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-            foreach (string paragraph in paragraphs)
+            foreach (string paragraph in paragraphs) // каждый абзац по отдельности 
             {
-                bool isChapterTitle = paragraph.Trim().StartsWith("Глава") ||
-                                      (paragraph.Trim().Length < 50 && !paragraph.Contains(" "));
-
-                Paragraph p = new Paragraph(new Run(paragraph.Trim()))
+                bool isChapterTitle = paragraph.Trim().StartsWith("Глава") || (paragraph.Trim().Length < 50 && !paragraph.Contains(" ")); // является ли абзац началом главы или нет 
+                 
+                Paragraph p = new Paragraph(new Run(paragraph.Trim())) // новый блок текста, дальше оформление 
                 {
                     FontSize = isChapterTitle ? 20 : 16,
                     FontWeight = isChapterTitle ? FontWeights.Bold : FontWeights.Normal,
@@ -52,10 +52,10 @@ namespace YP.Pages
                     LineHeight = 28
                 };
 
-                TextContent.Document.Blocks.Add(p);
+                TextContent.Document.Blocks.Add(p); // добавление обработанного абзаца в документ 
             }
 
-            TextScroll.ScrollToHome();
+            TextScroll.ScrollToHome(); // прокручивание в начало текста 
         }
 
         private void BackBtn_Click(object sender, RoutedEventArgs e)

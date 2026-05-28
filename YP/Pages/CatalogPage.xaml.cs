@@ -27,60 +27,60 @@ namespace YP.Pages
         {
             searchTB.Text = "";
 
-            var genres = Core.Context.Genres.OrderBy(g => g.name).ToList();
-            var allItem = new Genres { ID_Genres = 0, name = "Все жанры", description = "" };
-            var list = new List<Genres> { allItem };
-            list.AddRange(genres);
-            genreCB.ItemsSource = list;
-            genreCB.SelectedIndex = 0;
+            var genres = Core.Context.Genres.OrderBy(g => g.name).ToList(); // сортировака жанров в алфавитном 
+            var allItem = new Genres { ID_Genres = 0, name = "Все жанры", description = "" }; // создает новый пункт типо все жанры 
+            var list = new List<Genres> { allItem }; // новый список с все жанры
+            list.AddRange(genres); // добавление оставльных жанров в лист
+            genreCB.ItemsSource = list; // привязка листа к комбо бокс
+            genreCB.SelectedIndex = 0; // по умолчанию первое 
 
-            sortCB.SelectedIndex = 0; 
+            sortCB.SelectedIndex = 0;  // то же самое 
 
             LoadBooks();
         }
 
-        private void LoadBooks()
+        private void LoadBooks() // книги в списке
         {
             if (genreCB == null || sortCB == null || booksList == null)
                 return;
 
-            var query = Core.Context.Book.Where(b => !b.isFrozen);
+            var query = Core.Context.Book.Where(b => !b.isFrozen); // все не замороденные книги 
 
             if (!string.IsNullOrWhiteSpace(searchTB?.Text) && searchTB.Text != "Поиск...")
             {
                 string s = searchTB.Text.ToLower();
-                query = query.Where(b =>b.name.ToLower().Contains(s) || b.Users.name.ToLower().Contains(s));
+                query = query.Where(b =>b.name.ToLower().Contains(s) || b.Users.name.ToLower().Contains(s)); // поиск 
             }
 
             if (genreCB.SelectedItem is Genres genre && genre.ID_Genres > 0)
             {
-                var bookIds = Core.Context.BookGenre.Where(bg => bg.ID_Genres == genre.ID_Genres).Select(bg => bg.ID_Book).ToList();
-                query = query.Where(b => bookIds.Contains(b.ID_Book));
+                var bookIds = Core.Context.BookGenre.Where(bg => bg.ID_Genres == genre.ID_Genres).Select(bg => bg.ID_Book).ToList(); // сортировка по жанру 
+                query = query.Where(b => bookIds.Contains(b.ID_Book)); // фильтр только нужного 
             }
 
             if (sortCB.SelectedIndex == 1)
             {
-                query = query.OrderByDescending(b =>b.Reviews.Any() ? b.Reviews.Average(r => r.rating) : 0);
+                query = query.OrderByDescending(b =>b.Reviews.Any() ? b.Reviews.Average(r => r.rating) : 0); // по рейтингу. считате среднее. если нет - 0 
             }
             else
             {
-                query = query.OrderBy(b => b.name);
+                query = query.OrderBy(b => b.name); // по умолчанию - в алфавитном 
             }
             booksList.ItemsSource = query.ToList();
         }
 
-        private void SearchTB_TextChanged(object sender, TextChangedEventArgs e) => LoadBooks();
-        private void GenreCB_SelectionChanged(object sender, SelectionChangedEventArgs e) => LoadBooks();
-        private void SortCB_SelectionChanged(object sender, SelectionChangedEventArgs e) => LoadBooks();
-
-        private void BooksList_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void SearchTB_TextChanged(object sender, TextChangedEventArgs e) => LoadBooks(); // при каждом изменении текста в поисковике 
+        private void GenreCB_SelectionChanged(object sender, SelectionChangedEventArgs e) => LoadBooks(); // при выборе другого жанра 
+        private void SortCB_SelectionChanged(object sender, SelectionChangedEventArgs e) => LoadBooks(); // при выборе другого способа сортировки 
+         
+        private void BooksList_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e) // двойной клик - переход к книге 
         {
             if (booksList.SelectedItem is Book book)
             {
                 NavigationService.Navigate(new BookPage(book));
             }
         }
-        private void ResetFiltersBtn_Click(object sender, RoutedEventArgs e)
+        private void ResetFiltersBtn_Click(object sender, RoutedEventArgs e) // сбросить фильтры 
         {
             searchTB.Text = "";
             genreCB.SelectedIndex = 0;

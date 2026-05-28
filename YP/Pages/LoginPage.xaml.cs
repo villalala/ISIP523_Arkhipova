@@ -22,9 +22,9 @@ namespace YP.Pages
             InitializeComponent();
         }
 
-        private void LoginBtn_Click(object sender, RoutedEventArgs e)
+        private void LoginBtn_Click(object sender, RoutedEventArgs e) // кнопка войти 
         {
-            var user = Core.Context.Users.FirstOrDefault(u => u.login == LoginBox.Text && u.password == PassBox.Password);
+            var user = Core.Context.Users.FirstOrDefault(u => u.login == LoginBox.Text && u.password == PassBox.Password); // поиск пользователя 
 
             if (user == null)
             {
@@ -38,10 +38,10 @@ namespace YP.Pages
                 return;
             }
 
-            Core.currentUser = user;
+            Core.currentUser = user; // сохранение текущего пользователя 
             NavigationService.Navigate(new CatalogPage());
 
-            var main = Window.GetWindow(this) as MainWindow;
+            var main = Window.GetWindow(this) as MainWindow; // ссылка на главное окно 
             main.MainFrame.Navigate(new MainPage());
         }
 

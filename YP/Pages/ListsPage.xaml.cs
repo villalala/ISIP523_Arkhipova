@@ -25,28 +25,29 @@ namespace YP.Pages
 
         private void ListsPage_Loaded(object sender, RoutedEventArgs e)
         {
-            LoadBooks("Читаю");
+            LoadBooks("Читаю"); // по умолчанию этот список 
         }
 
         private void StatusFilter_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is RadioButton rb)
-            {
-                LoadBooks(rb.Content.ToString());
+            if (sender is RadioButton rb) 
+            { 
+                LoadBooks(rb.Content.ToString()); // смотрит какой радио бтн нажали и выводит нужную страницу
             }
         }
 
-        private void LoadBooks(string statusName)
+        private void LoadBooks(string statusName) // загружает книги пользоваетля 
         {
             if (Core.currentUser == null)
             {
-                booksList.ItemsSource = null;
+                booksList.ItemsSource = null; // очищает книги чтобы чужие не показать 
                 return;
             }
 
-            var query = Core.Context.ReadingLists.Where(rl => rl.ID_Users == Core.currentUser.ID_Users && rl.StatusBook.name == statusName).Select(rl => rl.Book).ToList();
+            // фильтрует только нужные книги 
+            var query = Core.Context.ReadingLists.Where(rl => rl.ID_Users == Core.currentUser.ID_Users && rl.StatusBook.name == statusName).Select(rl => rl.Book).ToList(); 
 
-            booksList.ItemsSource = query;
+            booksList.ItemsSource = query; // показывает эти книги 
         }
 
         private void BooksList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
